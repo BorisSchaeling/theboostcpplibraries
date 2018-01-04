@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="5.0" xml:lang="en" xml:id="boost.integer">
+  <title>Boost.Integer</title><indexterm><primary>Boost.Integer</primary></indexterm>
+  <para><link xlink:href="http://www.boost.org/libs/integer">Boost.Integer</link> provides the header file <filename class="headerfile">boost/cstdint.hpp</filename>, which defines specialized types for integers. These definitions originate from the C99 standard. This is a version of the standard for the C programming language that was released in 1999. Because the first version of the C++ standard was released in 1998, it does not include the specialized integer types defined in C99.</para>
+  <para>C99 defines types in the header file <filename class="headerfile">stdint.h</filename>. This header file was taken into C++11. In C++, it is called <filename class="headerfile">cstdint</filename>. If your development environment supports C++11, you can access <filename class="headerfile">cstdint</filename>, and you don’t have to use <filename class="headerfile">boost/cstdint.hpp</filename>.</para>
+  <example xml:id="ex.integer_01">
+    <title>Types for integers with number of bits</title>
+    <programlisting><xi:include href="../src/integer_01/main.cpp" parse="text"/></programlisting>
+  </example>
+  <para>The types from <filename class="headerfile">boost/cstdint.hpp</filename> are defined in the namespace <package>boost</package>. They can be divided into three categories:</para>
+  <itemizedlist>
+    <listitem>
+      <para>Types such as <type>boost::int8_t</type><indexterm><primary>int8_t, Boost.Integer</primary></indexterm> and <type>boost::uint64_t</type><indexterm><primary>uint64_t, Boost.Integer</primary></indexterm> carry the exact memory size in their names. Thus, <type>boost::int8_t</type> contains exactly 8 bits, and <type>boost::uint64_t</type> contains exactly 64 bits.</para>
+    </listitem>
+    <listitem>
+      <para>Types such as <type>boost::int_least8_t</type><indexterm><primary>int_least8_t, Boost.Integer</primary></indexterm> and <type>boost::uint_least32_t</type><indexterm><primary>uint_least32_t, Boost.Integer</primary></indexterm> contain at least as many bits as their names say. It is possible that the memory size of <type>boost::int_least8_t</type> will be greater than 8 bits and that of <type>boost::uint_least32_t</type> will be greater than 32 bits.</para>
+    </listitem>
+    <listitem>
+      <para>Types such as <type>boost::int_fast8_t</type><indexterm><primary>int_fast8_t, Boost.Integer</primary></indexterm> and <type>boost::uint_fast16_t</type><indexterm><primary>uint_fast16_t, Boost.Integer</primary></indexterm> also have a minimum size. Their actual size is set to a value that guarantees the best performance. <xref linkend="ex.integer_01" xrefstyle="enp" /> compiled with Visual C++ 2013 and run on a 64-bit Windows 7 system displays <computeroutput>4</computeroutput> for <code>sizeof(uif16)</code>.</para>
+    </listitem>
+  </itemizedlist>
+  <para>Please note that 64-bit types aren’t available on all platforms. You can check with the macro <code>BOOST_NO_INT64_T</code><indexterm><primary>BOOST_NO_INT64_T, Boost.Integer</primary></indexterm> whether 64-bit types are available or not.</para>
+  <example xml:id="ex.integer_02">
+    <title>More specialized types for integers</title>
+    <programlisting><xi:include href="../src/integer_02/main.cpp" parse="text"/></programlisting>
+  </example>
+  <para>Boost.Integer defines two types, <type>boost::intmax_t</type><indexterm><primary>intmax_t, Boost.Integer</primary></indexterm> and <type>boost::uintmax_t</type><indexterm><primary>uintmax_t, Boost.Integer</primary></indexterm>, for the maximum width integer types available on a platform. <xref linkend="ex.integer_02" xrefstyle="enp" /> compiled with Visual C++ 2013 and run on a 64-bit Windows 7 system displays <computeroutput>8</computeroutput> for <code>sizeof(imax)</code>. Thus, the biggest type for integers contains 64 bits.</para>
+  <para>Furthermore, Boost.Integer provides macros to use integers as literals with certain types. If an integer is written in C++ code, by default it uses the type <type>int</type> and allocates at least 4 bytes. Macros like <code>UINT8_C</code><indexterm><primary>UINT8_C, Boost.Integer</primary></indexterm> and <code>INT64_C</code><indexterm><primary>INT64_C, Boost.Integer</primary></indexterm> make it possible to set a minimum size for integers as literals. <xref linkend="ex.integer_02" xrefstyle="enp"/> returns at least 1 for <code>sizeof(UINT8_C(1))</code> and at least 8 for <code>sizeof(INT64_C(1))</code>.</para>
+  <para>Boost.Integer provides additional header files that mainly define classes used for template meta programming.</para>
+</chapter>

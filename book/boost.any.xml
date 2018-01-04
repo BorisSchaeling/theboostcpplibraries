@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="5.0" xml:lang="en" xml:id="boost.any">
+  <title>Boost.Any</title><indexterm><primary>Boost.Any</primary></indexterm>
+  <para>Strongly typed languages, such as C++, require that each variable have a specific type that defines what kind of information it can store. Other languages, such as JavaScript, allow developers to store any kind of information in a variable. For example, in JavaScript a single variable can contain a string, then a number, and afterwards a boolean value.</para>
+  <para><link xlink:href="http://www.boost.org/libs/any">Boost.Any</link> provides the class <classname>boost::any</classname><indexterm><primary>any, Boost.Any</primary></indexterm> which, like JavaScript variables, can store arbitrary types of information.</para>
+  <example xml:id="ex.any_01">
+    <title>Using <classname>boost::any</classname></title>
+    <programlisting><xi:include href="../src/any_01/main.cpp" parse="text"/></programlisting>
+  </example>
+  <para>To use <classname>boost::any</classname>, include the header file <filename class="headerfile">boost/any.hpp</filename>. Objects of type <classname>boost::any</classname> can then be created to store arbitrary information. In <xref linkend="ex.any_01" xrefstyle="enp"/>, <varname>a</varname> stores an <type>int</type>, then a <type>double</type>, then a <type>bool</type>.</para>
+  <para>Variables of type <classname>boost::any</classname> are not completely unlimited in what they can store; there are some preconditions, albeit minimal ones. Any value stored in a variable of type <classname>boost::any</classname> must be copy-constructible. Thus, it is not possible to store a C array, since C arrays aren’t copy-constructible.</para>
+  <para>To store a string, and not just a pointer to a C string, use <classname>std::string</classname> (see <xref linkend="ex.any_02" xrefstyle="enp"/>).</para>
+  <example xml:id="ex.any_02">
+    <title>Storing a string in <classname>boost::any</classname></title>
+    <programlisting><xi:include href="../src/any_02/main.cpp" parse="text"/></programlisting>
+  </example>
+  <para>To access the value of <classname>boost::any</classname> variables, use the cast operator <code>boost::any_cast</code><indexterm><primary>any_cast, Boost.Any</primary></indexterm> (see <xref linkend="ex.any_03" xrefstyle="enp"/>).</para>
+  <example xml:id="ex.any_03">
+    <title>Accessing values with <code>boost::any_cast</code></title>
+    <programlisting><xi:include href="../src/any_03/main.cpp" parse="text"/></programlisting>
+  </example>
+  <para>By passing the appropriate type as a template parameter to <code>boost::any_cast</code>, the value of the variable is converted. If an invalid type is specified, an exception of type <exceptionname>boost::bad_any_cast</exceptionname><indexterm><primary>bad_any_cast, Boost.Any</primary></indexterm> will be thrown.</para>
+  <example xml:id="ex.any_04">
+    <title><exceptionname>boost::bad_any_cast</exceptionname> in case of an error</title>
+    <programlisting><xi:include href="../src/any_04/main.cpp" parse="text"/></programlisting>
+  </example>
+  <para><xref linkend="ex.any_04" xrefstyle="enp"/> throws an exception because the template parameter of type <type>float</type> does not match the type <type>int</type> stored in <varname>a</varname>. The program would also throw an exception if <type>short</type> or <type>long</type> were used as the template parameter.</para>
+  <para>Because <exceptionname>boost::bad_any_cast</exceptionname> is derived from <exceptionname>std::bad_cast</exceptionname>, <code>catch</code> handlers can catch exceptions of this type, too.</para>
+  <para>To check whether or not a variable of type <classname>boost::any</classname> contains information, use the member function <methodname>empty</methodname><indexterm><primary>any::empty</primary></indexterm><indexterm><primary>empty, any</primary></indexterm>. To check the type of the stored information, use the member function <methodname>type</methodname><indexterm><primary>any::type</primary></indexterm><indexterm><primary>type, any</primary></indexterm>.</para>
+  <example xml:id="ex.any_05">
+    <title>Checking type of currently stored value</title>
+    <programlisting><xi:include href="../src/any_05/main.cpp" parse="text"/></programlisting>
+  </example>
+  <para><xref linkend="ex.any_05" xrefstyle="enp"/> uses both <methodname>empty</methodname> and <methodname>type</methodname>. While <methodname>empty</methodname> returns a boolean value, the return value of <methodname>type</methodname> is of type <classname>std::type_info</classname>, which is defined in the header file <filename class="headerfile">typeinfo</filename>.</para>
+  <para><xref linkend="ex.any_06" xrefstyle="enp"/> shows how to obtain a pointer to the value stored in a <classname>boost::any</classname> variable using <code>boost::any_cast</code>.</para>
+  <example xml:id="ex.any_06">
+    <title>Accessing values through a pointer</title>
+    <programlisting><xi:include href="../src/any_06/main.cpp" parse="text"/></programlisting>
+  </example>
+  <para>You simply pass a pointer to a <code>boost::any</code> variable to <code>boost::any_cast</code>; the template parameter remains unchanged.</para>
+</chapter>

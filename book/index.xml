@@ -1,0 +1,428 @@
+<?xml version="1.0" encoding="utf-8"?>
+<book xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="5.0" xml:lang="en" xml:id="the-boost-cpp-libraries">
+  <title>The Boost C++ Libraries</title>
+  <info>
+    <author>
+      <personname>
+        <firstname>Boris</firstname>
+        <surname>Schäling</surname>
+      </personname>
+      <email>boris@theboostcpplibraries.com</email>
+      <uri type="website">
+        <link xlink:href="https://theboostcpplibraries.com/">https://theboostcpplibraries.com</link>
+      </uri>
+    </author>
+    <copyright condition="html;print;pdf">
+      <year>2008 &#x2013; 2018</year>
+      <holder>Boris Schäling</holder>
+    </copyright>
+    <copyright condition="epub;kindle">
+      <year>2008</year>
+      <year>2009</year>
+      <year>2010</year>
+      <year>2011</year>
+      <year>2012</year>
+      <year>2013</year>
+      <year>2014</year>
+      <year>2015</year>
+      <year>2016</year>
+      <year>2017</year>
+      <year>2018</year>
+      <holder>Boris Schäling</holder>
+    </copyright>
+    <abstract condition="html">
+      <para>Online book “The Boost C++ Libraries” from Boris Schäling introducing 72 Boost libraries with more than 430 examples</para>
+    </abstract>
+    <cover>
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="static/cover_large.png" format="PNG">
+            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="100%" height="100%" viewBox="0 0 630 757" preserveAspectRatio="xMidYMid meet" condition="epub;kindle">
+              <image width="630" height="757" xlink:href="static/cover_large.png"/>
+            </svg>
+          </imagedata>
+        </imageobject>
+      </mediaobject>
+    </cover>
+    <biblioid class="isbn" condition="print">ISBN: 978-1-937434-36-6</biblioid>
+    <edition>Second English</edition>
+    <publisher condition="print">
+      <publishername>XML Press</publishername>
+      <address><street>24310 Moulton Pkwy, Suite O-175</street>
+      <city>Laguna Hills</city><state>CA</state></address>
+      <address>http://xmlpress.net</address>
+    </publisher>
+    <mediaobject condition="print">
+      <textobject><phrase>XML Press</phrase></textobject>
+      <imageobject>
+        <imagedata width="1.0in" fileref="images/XML-Press-Logo-URL-gray.svg" format="SVG"/>
+      </imageobject>
+    </mediaobject>
+    <address condition="print">
+      <personname>XML Press</personname>
+      <street>24310 Moulton Pkwy, Suite O-175</street>
+      <city>Laguna Hills,</city> <state>California</state>
+      <link xlink:href="http://xmlpress.net">http://xmlpress.net</link>
+    </address>
+    <legalnotice xml:id="license">
+      <para condition="print">
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="images/by-nc-nd.svg" width=".6in" format="SVG"/>
+          </imageobject>
+        </mediaobject>
+      </para>
+      <para condition="html;print;epub;kindle">With the exceptions noted below, this work is licensed under a Creative Commons Attribution - NonCommercial - NoDerivatives 4.0 International License. Visit <link xlink:href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.en"/> to view a copy of the full license.</para>
+      <para condition="pdf">This work is licensed under a Creative Commons Attribution - NonCommercial - NoDerivatives 4.0 International License. Visit <link xlink:href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.en"/> to view a copy of the full license.</para>
+      <formalpara condition="html;print;epub;kindle">
+        <title>Exceptions:</title>
+        <para>The Boost C++ logo is the property of the Boost C++ developers and is used here with their permission. With the exception of the Boost C++ logo, the cover is Copyright &#169; 2014 XML Press, All Rights Reserved.</para>
+      </formalpara>
+    </legalnotice>
+    <legalnotice xml:id="disclaimer" condition="print">
+      <title>Disclaimer</title>
+      <para>The information in this book is provided on an <quote>as is</quote> basis, without warranty. While every effort has been taken by the author and XML Press in the preparation of this book, the author and XML Press shall have neither liability nor responsibility to any person or entity with respect to any loss or damages arising from the information contained in this book.</para>
+      <para>This book contains links to third-party web sites that are not under the control of the author or XML Press. The author and XML Press are not responsible for the content of any linked site. Inclusion of a link in this book does not imply that the author or XML Press endorses or accepts any responsibility for the content of that third-party site.</para>
+    </legalnotice>
+    <legalnotice xml:id="trademarks" condition="print">
+      <title>Trademarks</title>
+      <para>XML Press and the XML Press logo are trademarks of XML Press.</para>
+      <para>All terms mentioned in this book that are known to be trademarks or service marks have been capitalized as appropriate. Use of a term in this book should not be regarded as affecting the validity of any trademark or service mark.</para>
+    </legalnotice>
+    <pubdate>September 22, 2014</pubdate>
+  </info>
+  <preface xml:id="preface">
+    <title>Preface</title>
+    <bridgehead renderas="sect2" xml:id="what-you-will-learn">What you will learn</bridgehead>
+    <para>This book is an introduction to the Boost C++ Libraries. The Boost C++ Libraries complement the standard library. Because the Boost C++ Libraries are based on the standard, they are implemented using state-of-the-art C++. They are platform independent and are supported on many operating systems, including Windows and Linux, by a large developer community.</para>
+    <para>The Boost C++ Libraries enable you to boost your productivity as a C++ developer. For example, you can benefit from smart pointers that help you to write more reliable code or use one of the many libraries to develop platform-independent network applications. Since the Boost libraries partly anticipate developments in the standard, you can benefit earlier from tools without having to wait for them to become available in the standard library.</para>
+    <bridgehead renderas="sect2" xml:id="what-you-should-know">What you should know</bridgehead>
+    <para>Since the Boost libraries are based on, and extend, the standard, you should know the standard well. You should understand and be able to use containers, iterators, and algorithms, and ideally you should have heard of concepts such as <acronym>RAII</acronym>, function objects, and predicates. The better you know the standard, the more you will benefit from the Boost libraries.</para>
+    <para>In general, you don’t need any knowledge of template meta programming to use the libraries introduced in this book. The main focus is on libraries that can be learned quickly and easily and that can be immediately of great benefit in your work as a C++ developer.</para>
+    <para>Many examples use features that were added to the standard with C++11. For example, the keyword <code>auto</code> is used to avoid specifying types explicitly. Constructors are called through uniform initialization: variables are initialized, if possible, with a pair of curly brackets instead of parentheses. Many examples use lambda functions to make code shorter and more compact. While you can understand many examples without detailed knowledge of C++11, this book is based on the current standard.</para>
+    <bridgehead renderas="sect2" xml:id="typographical-conventions">Typographical Conventions</bridgehead>
+    <para>The following text styles are used in this book:</para>
+    <variablelist termlength="1.75in">
+      <varlistentry>
+        <term>
+          <code>Monospace font</code>
+        </term>
+        <listitem>
+          <para>A monospace font is used for class names, function names, and keywords &#x2013; basically for any C++ code. It is also used for code examples, command line options, and program output. For example: <code>int i = 0;</code></para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>
+          <varname>Monospace bold font</varname>
+        </term>
+        <listitem>
+          <para>A monospace bold font is used for variable names, objects, and user input. For example: The variable <varname>i</varname> is initialized with 0.</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>
+          <emphasis role="strong">Bold</emphasis>
+        </term>
+        <listitem>
+          <para>Commands are marked in bold. For example: The Boost libraries are compiled with a program called <command>bjam</command>.</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>
+          <emphasis role="concept">Italic</emphasis>
+        </term>
+        <listitem>
+          <para>An italic font is used when a new concept is introduced and mentioned for the first time. For example: <emphasis role="concept"><acronym>RAII</acronym></emphasis> is the abbreviation for Resource Acquisition Is Initialization &#x2013; a concept smart pointers are based on.</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+    <bridgehead renderas="sect2" xml:id="examples">Examples</bridgehead>
+    <para>This book contains more than 430 examples. Every example is complete and can be compiled and executed. You can download all examples from <link xlink:href="https://theboostcpplibraries.com/examples"/> for a quick start.</para>
+    <para>All examples have been tested with the following compilers: Microsoft Visual Studio Professional 2013 Update 1 (64-bit Windows 7 Professional with Service Pack 1), GCC 4.8.3 (64-bit Cygwin 1.7.30), GCC 4.6.3 (32-bit Ubuntu 12.04.4), and Clang 3.3 (32-bit Ubuntu 12.04.4).</para>
+    <para>All of the examples in this book are based on the C++11 standard. During testing, all of the compilers were configured to enable support for C++11. Most examples will work on Windows, Linux, and OS X, but a few are platform dependent. The exceptions are noted in the example descriptions.</para>
+    <para>The examples are provided with NO WARRANTY expressed or implied. They are licensed under the <link xlink:href="http://www.boost.org/LICENSE_1_0.txt">Boost Software License</link>.</para>
+    <bridgehead renderas="sect2" condition="print" xml:id="acknowledgments">Acknowledgments</bridgehead>
+    <para condition="print">A project like this book wouldn’t be possible with the help and support of others. A big thank you goes to the Boost community &#x2013; not only for more than a hundred useful libraries but also for many suggestions, hints, and discussions on all kind of topics around C++. I very much thank Richard Hamilton and his publishing house, who made this second edition of the book possible. And a special thank you goes to my wife Aysegül, who supported me with tea and cookies during the countless hours I was working on this book. From time to time she looked over my shoulder and learned that in the mysterious world of software development something exists called the Boost C++ Libraries.</para>
+    <literallayout condition="print">Boris Schäling
+Amsterdam, August 2014</literallayout>
+  </preface>
+  <xi:include href="introduction.xml"/>
+  <part xml:id="raii-and-memory-management">
+    <title><acronym>RAII</acronym> and Memory Management</title>
+    <partintro>
+      <para><acronym>RAII</acronym> stands for Resource Acquisition Is Initialization. The idea behind this idiom: for any resource acquired, an object should be initialized that will own that resource and close it in the destructor. Smart pointers are a prominent example of <acronym>RAII</acronym>. They help avoid memory leaks. The following libraries provide smart pointers and other tools to help you manage memory more easily.</para>
+      <itemizedlist>
+        <listitem><para>Boost.SmartPointers defines smart pointers. Some of them are provided by the C++11 standard library. Others are only available in Boost.</para></listitem>
+        <listitem><para>Boost.PointerContainer defines containers to store dynamically allocated objects &#x2013; objects that are created with <code>new</code>. Because the containers from this library destroy objects with <code>delete</code> in the destructor, no smart pointers need to be used.</para></listitem>
+        <listitem><para>Boost.ScopeExit makes it possible to use the <acronym>RAII</acronym> idiom for any resources. While Boost.SmartPointers and Boost.PointerContainer can only be used with pointers to dynamically allocated objects, with Boost.ScopeExit no resource-specific classes need to be used.</para></listitem>
+        <listitem><para>Boost.Pool has nothing to do with <acronym>RAII</acronym>, but it has a lot to do with memory management. This library defines numerous classes to provide memory to your program faster.</para></listitem>
+      </itemizedlist>
+    </partintro>
+    <xi:include href="boost.smartpointers.xml"/>
+    <xi:include href="boost.ptr_container.xml"/>
+    <xi:include href="boost.scope_exit.xml"/>
+    <xi:include href="boost.pool.xml"/>
+  </part>
+  <part xml:id="string-handling">
+    <title>String Handling</title>
+    <partintro>
+      <para>The following libraries provide tools to simplify working with strings.</para>
+      <itemizedlist>
+        <listitem><para>Boost.StringAlgorithms defines many algorithms specifically for strings. For example, you will find <phrase role="nohyphen">algorithms</phrase> to convert strings to lower or upper case.</para></listitem>
+        <listitem><para>Boost.LexicalCast provides a cast operator to convert a number to a string or vice versa. The library uses stringstreams internally but might be optimized for conversions between certain types.</para></listitem>
+        <listitem><para>Boost.Format provides a type-safe alternative for <function>std::printf</function>. Like Boost.LexicalCast, this library uses stringstreams internally. Boost.Format is extensible and supports user-defined types if output stream operators are defined.</para></listitem>
+        <listitem><para>Boost.Regex and Boost.Xpressive are libraries to search within strings with regular expressions. While Boost.Regex expects regular expressions written as strings, Boost.Xpressive lets you write them as C++ code.</para></listitem>
+        <listitem><para>Boost.Tokenizer makes it possible to iterate over substrings in a string.</para></listitem>
+        <listitem><para>Boost.Spirit can be used to develop parsers based on rules similar to Extended Backus-Naur-Form.</para></listitem>
+      </itemizedlist>
+    </partintro>
+    <xi:include href="boost.stringalgorithms.xml"/>
+    <xi:include href="boost.lexical_cast.xml"/>
+    <xi:include href="boost.format.xml"/>
+    <xi:include href="boost.regex.xml"/>
+    <xi:include href="boost.xpressive.xml"/>
+    <xi:include href="boost.tokenizer.xml"/>
+    <xi:include href="boost.spirit.xml"/>
+  </part>
+  <part xml:id="containers">
+    <title>Containers</title>
+    <partintro>
+      <para>Containers are one of the most useful data structures in C++. The standard library provides many containers, and the Boost libraries provide even more.</para>
+      <itemizedlist>
+        <listitem><para>Boost.MultiIndex goes one step further: the containers from this library can support multiple interfaces from other containers at the same time. Containers from Boost.MultiIndex are like merged containers and provide the advantages of all of the containers they have been merged with.</para></listitem>
+        <listitem><para>Boost.Bimap is based on Boost.MultiIndex. It provides a container similar to <classname>std::unordered_map</classname>, except the elements can be looked up from both sides. Thus, depending on how the container is accessed, either side can be the key. When one side is the key, the other side is the value.</para></listitem>
+        <listitem><para>Boost.Array and Boost.Unordered define the classes <classname>boost::array</classname>, <classname>boost::unordered_set</classname>, and <classname>boost::unordered_map</classname>, which were added to the standard library with C++11.</para></listitem>
+        <listitem><para>Boost.CircularBuffer provides a container whose most important property is that it will overwrite the first element in the buffer when a value is added to a full circular buffer.</para></listitem>
+        <listitem><para>Boost.Heap provides variants of priority queues &#x2013; classes that resemble <classname>std::priority_queue</classname>.</para></listitem>
+        <listitem><para>Boost.Intrusive lets you create containers that, unlike the containers from the standard library, neither copy nor move objects. However, to add an object to an intrusive list, the object’s type must meet certain requirements.</para></listitem>
+        <listitem><para>Boost.MultiArray tries to simplify the use of multidimensional arrays. For example, it’s possible to treat part of a multidimensional array as a separate array.</para></listitem>
+        <listitem><para>Boost.Container is a library that defines the same containers as the standard library. Using Boost.Container can make sense if, for example, you need to support a program on multiple platforms and you want to avoid problems caused by implementation-specific differences in the standard library.</para></listitem>
+      </itemizedlist>
+    </partintro>
+    <xi:include href="boost.multiindex.xml"/>
+    <xi:include href="boost.bimap.xml"/>
+    <xi:include href="boost.array.xml"/>
+    <xi:include href="boost.unordered.xml"/>
+    <xi:include href="boost.circularbuffer.xml"/>
+    <xi:include href="boost.heap.xml"/>
+    <xi:include href="boost.intrusive.xml"/>
+    <xi:include href="boost.multiarray.xml"/>
+    <xi:include href="boost.container.xml"/>
+  </part>
+  <part xml:id="data-structures">
+    <title>Data Structures</title>
+    <partintro>
+      <para>Data structures are similar to containers since they can store one or multiple elements. However, they differ from containers because they don’t support operations containers usually support. For example, it isn’t possible, with the data structures introduced in this part, to access all elements in a single iteration.</para>
+      <itemizedlist>
+        <listitem><para>Boost.Optional makes it easy to mark optional return values. Objects created with Boost.Optional are either empty or contain a single element. With Boost.Optional, you don’t need to use special values like a null pointer or -1 to indicate that a function might not have a return value.</para></listitem>
+        <listitem><para>Boost.Tuple provides <classname>boost::tuple</classname>, a class that has been part of the standard library since C++11.</para></listitem>
+        <listitem><para>Boost.Any and Boost.Variant let you create variables that can store values of different types. Boost.Any supports any arbitrary type, and Boost.Variant lets you pass the types that need to be supported as template parameters.</para></listitem>
+        <listitem><para>Boost.PropertyTree provides a tree-like data structure. This library is typically used to help manage configuration data. The data can also be written to and loaded from a file in formats such as JSON.</para></listitem>
+        <listitem><para>Boost.DynamicBitset provides a class that resembles <classname>std::bitset</classname> but is configured at runtime.</para></listitem>
+        <listitem><para>Boost.Tribool provides a data type similar to <type>bool</type> that supports three states.</para></listitem>
+        <listitem><para>Boost.CompressedPair defines the class <classname>boost::compressed_pair</classname>, which can replace <classname>std::pair</classname>. This class supports the so-called empty base class optimization.</para></listitem>
+      </itemizedlist>
+    </partintro>
+    <xi:include href="boost.optional.xml"/>
+    <xi:include href="boost.tuple.xml"/>
+    <xi:include href="boost.any.xml"/>
+    <xi:include href="boost.variant.xml"/>
+    <xi:include href="boost.propertytree.xml"/>
+    <xi:include href="boost.dynamicbitset.xml"/>
+    <xi:include href="boost.tribool.xml"/>
+    <xi:include href="boost.compressed_pair.xml"/>
+  </part>
+  <part xml:id="algorithms">
+    <title>Algorithms</title>
+    <partintro>
+      <para>The following libraries provide algorithms that complement the algorithms from the standard library.</para>
+      <itemizedlist>
+        <listitem><para>Boost.Algorithm collects and provides useful algorithms.</para></listitem>
+        <listitem><para>Boost.Range also provides algorithms, but more important, it defines a new concept called <emphasis role="concept">range</emphasis>, which should make using algorithms easier.</para></listitem>
+        <listitem><para>Boost.Graph is specialized for graphs and provides algorithms such as finding the shortest path between two points.</para></listitem>
+      </itemizedlist>
+      <para>A few libraries that contain algorithms are introduced in other parts of the book. For example, you will find algorithms for strings in the library Boost.StringAlgorithms, which is introduced in <xref linkend="string-handling" xrefstyle="t-p"/></para>
+    </partintro>
+    <xi:include href="boost.algorithm.xml"/>
+    <xi:include href="boost.range.xml"/>
+    <xi:include href="boost.graph.xml"/>
+  </part>
+  <part xml:id="communication">
+    <title>Communication</title>
+    <partintro>
+      <para>The following libraries facilitate communication with other programs.</para>
+      <itemizedlist>
+        <listitem><para>Boot.Asio is for communicating over networks. Boost.Asio does not just support network operations. Asio stands for asynchronous input/output. You can use this library to process data asynchronously, for example, when your program communicates with devices, such as network cards, that can handle tasks concurrently with code executed in your program.</para></listitem>
+        <listitem><para>Boost.Interprocess is for communicating through shared memory.</para></listitem>
+      </itemizedlist>
+    </partintro>
+    <xi:include href="boost.asio.xml"/>
+    <xi:include href="boost.interprocess.xml"/>
+  </part>
+  <part xml:id="streams-and-files">
+    <title>Streams and Files</title>
+    <partintro>
+      <para>The following libraries facilitate working with streams and files.</para>
+      <itemizedlist>
+        <listitem><para>Boost.IOStreams provides streams that go far beyond what the standard library offers. Boost.IOStreams gives you access to more streams to read and write data from and to many different sources and sinks. In addition, filters enable a variety of operations such as compressing/uncompressing data while reading or writing.</para></listitem>
+        <listitem><para>Boost.Filesystem provides access to the filesystem. With Boost.Filesystem you can, for example, copy files or iterate over files in a directory.</para></listitem>
+      </itemizedlist>
+    </partintro>
+    <xi:include href="boost.iostreams.xml"/>
+    <xi:include href="boost.filesystem.xml"/>
+  </part>
+  <part xml:id="time">
+    <title>Time</title>
+    <partintro>
+      <para>The following libraries process time values.</para>
+      <itemizedlist>
+        <listitem><para>Boost.DateTime defines classes for time points and periods &#x2013; for both time of day and calendar dates &#x2013; and functions to process them. For example, it is possible to iterate over dates.</para></listitem>
+        <listitem><para>Boost.Chrono and Boost.Timer provide clocks to measure time. The clocks provided by Boost.Timer are specialized for measuring code execution time and are only used when optimizing code.</para></listitem>
+      </itemizedlist>
+    </partintro>
+    <xi:include href="boost.datetime.xml"/>
+    <xi:include href="boost.chrono.xml"/>
+    <xi:include href="boost.timer.xml"/>
+  </part>
+  <part xml:id="functional-programming">
+    <title>Functional Programming</title>
+    <partintro>
+      <para>In the functional programming model, functions are objects that, like other objects, can be passed as parameters to functions or stored in containers. There are numerous Boost libraries that support the functional programming model.</para>
+      <itemizedlist>
+        <listitem><para>Boost.Phoenix is the most extensive and, as of today, most important of these libraries. It replaces the library Boost.Lambda, which is introduced briefly, but only for completeness.</para></listitem>
+        <listitem><para>Boost.Function provides a class that makes it easy to define a function pointer without using the syntax that originated with the C programming language.</para></listitem>
+        <listitem><para>Boost.Bind is an adapter that lets you pass functions as parameters to other functions even if the actual signature is different from the expected signature.</para></listitem>
+        <listitem><para>Boost.Ref can be used to pass a reference to an object, even if a function passes the parameter by copy.</para></listitem>
+        <listitem><para>Boost.Lambda could be called a predecessor of Boost.Phoenix. It is a rather old library and allowed using lambda functions many years before they were added with C++11 to the programming language.</para></listitem>
+      </itemizedlist>
+    </partintro>
+    <xi:include href="boost.phoenix.xml"/>
+    <xi:include href="boost.function.xml"/>
+    <xi:include href="boost.bind.xml"/>
+    <xi:include href="boost.ref.xml"/>
+    <xi:include href="boost.lambda.xml"/>
+  </part>
+  <part xml:id="parallel-programming">
+    <title>Parallel Programming</title>
+    <partintro>
+      <para>The following libraries support the parallel programming model.</para>
+      <itemizedlist>
+        <listitem><para>Boost.Thread lets you create and manage your own threads.</para></listitem>
+        <listitem><para>Boost.Atomic lets you access variables of integral types with atomic operations from multiple threads.</para></listitem>
+        <listitem><para>Boost.Lockfree provides thread-safe containers.</para></listitem>
+        <listitem><para>Boost.MPI originates from the supercomputer domain. With Boost.MPI your program is started multiple times and executed in multiple processes. You concentrate on programming the actual tasks that should be executed concurrently, and Boost.MPI coordinates the processes. With Boost.MPI you don’t need to take care of details like synchronizing access on shared data. However, Boost.MPI does require an appropriate runtime environment.</para></listitem>
+      </itemizedlist>
+    </partintro>
+    <xi:include href="boost.thread.xml"/>
+    <xi:include href="boost.atomic.xml"/>
+    <xi:include href="boost.lockfree.xml"/>
+    <xi:include href="boost.mpi.xml"/>
+  </part>
+  <part xml:id="generic-programming">
+    <title>Generic Programming</title>
+    <partintro>
+      <para>The following libraries support generic programming. The libraries can be used without detailed knowledge of template meta programming.</para>
+      <itemizedlist>
+        <listitem><para>Boost.TypeTraits provides functions to check properties of types.</para></listitem>
+        <listitem><para>Boost.EnableIf can be used together with Boost.TypeTraits to, for example, overload functions based on their return types.</para></listitem>
+        <listitem><para>Boost.Fusion makes it possible to create heterogeneous containers &#x2013; containers whose elements can have different types.</para></listitem>
+      </itemizedlist>
+    </partintro>
+    <xi:include href="boost.typetraits.xml"/>
+    <xi:include href="boost.enableif.xml"/>
+    <xi:include href="boost.fusion.xml"/>
+  </part>
+  <part xml:id="language-extensions">
+    <title>Language Extensions</title>
+    <partintro>
+      <para>The following libraries extend the programming language C++.</para>
+      <itemizedlist>
+        <listitem><para>Boost.Coroutine makes it possible to use coroutines in C++ &#x2013; something other programming languages usually support with the keyword <code>yield</code>.</para></listitem>
+        <listitem><para>Boost.Foreach provides a range-based <code>for</code> loop, which was added to the language with C++11.</para></listitem>
+        <listitem><para>Boost.Parameter lets you pass parameters as name/value pairs and in any order &#x2013; as is allowed in Python, for example.</para></listitem>
+        <listitem><para>Boost.Conversion provides two cast operators that replace <code>dynamic_cast</code> and allow you to differentiate between a downcast and a cross cast.</para></listitem>
+      </itemizedlist>
+    </partintro>
+    <xi:include href="boost.coroutine.xml"/>
+    <xi:include href="boost.foreach.xml"/>
+    <xi:include href="boost.parameter.xml"/>
+    <xi:include href="boost.conversion.xml"/>
+  </part>
+  <part xml:id="error-handling">
+    <title>Error Handling</title>
+    <partintro>
+      <para>The following libraries support error handling.</para>
+      <itemizedlist>
+        <listitem><para>Boost.System provides classes to describe and identify errors. Since C++11, these classes have been part of the standard library.</para></listitem>
+        <listitem><para>Boost.Exception makes it possible to attach data to exceptions after they have been thrown.</para></listitem>
+      </itemizedlist>
+    </partintro>
+    <xi:include href="boost.system.xml"/>
+    <xi:include href="boost.exception.xml"/>
+  </part>
+  <part xml:id="number-handling">
+    <title>Number Handling</title>
+    <partintro>
+      <para>The following libraries are all about working with numbers.</para>
+      <itemizedlist>
+        <listitem><para>Boost.Integer provides integral types to, for example, specify the exact number of bytes used by a variable.</para></listitem>
+        <listitem><para>Boost.Accumulators provides accumulators that you can pass numbers to when you are calculating values like the mean or standard deviation.</para></listitem>
+        <listitem><para>Boost.MinMax lets you get the smallest and largest number in a container with one function call.</para></listitem>
+        <listitem><para>Boost.Random provides random number generators.</para></listitem>
+        <listitem><para>Boost.NumericConversion provides a cast operator that protects against unintended overflows.</para></listitem>
+      </itemizedlist>
+    </partintro>
+    <xi:include href="boost.integer.xml"/>
+    <xi:include href="boost.accumulators.xml"/>
+    <xi:include href="boost.minmax.xml"/>
+    <xi:include href="boost.random.xml"/>
+    <xi:include href="boost.numeric_conversion.xml"/>
+  </part>
+  <part xml:id="application-libraries">
+    <title>Application Libraries</title>
+    <partintro>
+      <para>Application libraries refers to libraries that are typically used exclusively in the development of stand-alone applications and not in the development of libraries.</para>
+      <itemizedlist>
+        <listitem><para>Boost.Log is a logging library.</para></listitem>
+        <listitem><para>Boost.ProgramOptions is a library to define and parse command line options.</para></listitem>
+        <listitem><para>Boost.Serialization lets you serialize objects to, for example, save them to and load them from files.</para></listitem>
+        <listitem><para>Boost.Uuid supports working with <acronym>UUID</acronym>s.</para></listitem>
+      </itemizedlist>
+    </partintro>
+    <xi:include href="boost.log.xml"/>
+    <xi:include href="boost.program_options.xml"/>
+    <xi:include href="boost.serialization.xml"/>
+    <xi:include href="boost.uuid.xml"/>
+  </part>
+  <part xml:id="design-patterns">
+    <title>Design Patterns</title>
+    <partintro>
+      <para>The following libraries are for design patterns.</para>
+      <itemizedlist>
+        <listitem><para>Boost.Flyweight helps in situations where many identical objects are used in a program and memory consumption needs to be reduced.</para></listitem>
+        <listitem><para>Boost.Signals2 makes it easy to use the observer design pattern. This library is called Boost.Signals2 because it implements the signal/slot concept.</para></listitem>
+        <listitem><para>Boost.MetaStateMachine makes it possible to transfer state machines from UML to C++.</para></listitem>
+      </itemizedlist>
+    </partintro>
+    <xi:include href="boost.flyweight.xml"/>
+    <xi:include href="boost.signals2.xml"/>
+    <xi:include href="boost.msm.xml"/>
+  </part>
+  <part xml:id="other-libraries">
+    <title>Other Libraries</title>
+    <partintro>
+      <para>The following libraries provide small but helpful utilities.</para>
+      <itemizedlist>
+        <listitem><para>Boost.Utility collects everything that doesn’t fit somewhere else in the Boost libraries.</para></listitem>
+        <listitem><para>Boost.Assign provides helper functions that make it easier to perform operations such as adding multiple values to a container without having to call <methodname>push_back</methodname> repeatedly.</para></listitem>
+        <listitem><para>Boost.Swap provides a variant of <function>std::swap</function> that is optimized for the Boost libraries.</para></listitem>
+        <listitem><para>Boost.Operators makes it easy to define operators based on other operators.</para></listitem>
+      </itemizedlist></partintro>
+    <xi:include href="boost.utility.xml"/>
+    <xi:include href="boost.assign.xml"/>
+    <xi:include href="boost.swap.xml"/>
+    <xi:include href="boost.operators.xml"/>
+  </part>
+  <index xml:id="index"/>
+  <xi:include href="colophon.xml" condition="print"/>
+</book>

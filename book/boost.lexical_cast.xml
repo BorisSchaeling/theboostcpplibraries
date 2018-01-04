@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="5.0" xml:lang="en" xml:id="boost.lexical_cast">
+  <title>Boost.LexicalCast</title><indexterm><primary>Boost.LexicalCast</primary></indexterm>
+  <para><link xlink:href="http://www.boost.org/doc/libs/release/doc/html/boost_lexical_cast.html">Boost.LexicalCast</link> provides a cast operator, <code>boost::lexical_cast</code><indexterm><primary>lexical_cast, Boost.LexicalCast</primary></indexterm>, that can convert numbers from strings to numeric types like <type>int</type> or <type>double</type> and vice versa. <code>boost::lexical_cast</code> is an alternative to functions like <function>std::stoi</function>, <function>std::stod</function>, and <function>std::to_string</function>, which were added to the standard library in C++11.</para>
+  <example xml:id="ex.lexical_cast_01">
+    <title>Using <code>boost::lexical_cast</code></title>
+    <programlisting><xi:include href="../src/lexical_cast_01/main.cpp" parse="text"/></programlisting>
+  </example>
+  <para>The cast operator <code>boost::lexical_cast</code> can convert numbers of different types. <xref linkend="ex.lexical_cast_01" xrefstyle="enp"/> first converts the integer 123 to a string, then converts the string to a floating point number. To use <code>boost::lexical_cast</code>, include the header file <filename class="headerfile">boost/lexical_cast.hpp</filename>.</para>
+  <para><code>boost::lexical_cast</code> uses streams internally to perform the conversion. Therefore, only types with overloaded <methodname role="operator">operator&lt;&lt;</methodname> and <methodname role="operator">operator&gt;&gt;</methodname> can be converted. However, <code>boost::lexical_cast</code> can be optimized for certain types to implement a more efficient conversion.</para>
+  <example xml:id="ex.lexical_cast_02">
+    <title><exceptionname>boost::bad_lexical_cast</exceptionname> in case of an error</title>
+    <programlisting><xi:include href="../src/lexical_cast_02/main.cpp" parse="text"/></programlisting>
+  </example>
+  <para>If a conversion fails, an exception of type <exceptionname>boost::bad_lexical_cast</exceptionname><indexterm><primary>bad_lexical_cast, Boost.Conversion</primary></indexterm>, which is derived from <exceptionname>std::bad_cast</exceptionname>, is thrown. <xref linkend="ex.lexical_cast_02" xrefstyle="enp"/> throws an exception because the string <quote>abc</quote> cannot be converted to a number of type <type>int</type>.</para>
+</chapter>

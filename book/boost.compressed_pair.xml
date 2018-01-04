@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="5.0" xml:lang="en" xml:id="boost.compressed_pair">
+  <title>Boost.CompressedPair</title><indexterm><primary>Boost.CompressedPair</primary></indexterm>
+  <para><link xlink:href="http://www.boost.org/libs/utility/compressed_pair.htm">Boost.CompressedPair</link> provides <classname>boost::compressed_pair</classname><indexterm><primary>compressed_pair, Boost.CompressedPair</primary></indexterm>, a class that behaves like <classname>std::pair</classname>. However, if one or both template parameters are empty classes, <classname>boost::compressed_pair</classname> consumes less memory. <classname>boost::compressed_pair</classname> uses a technique known as empty base class optimization.</para>
+  <para>To use <classname>boost::compressed_pair</classname>, include the header file <filename class="headerfile">boost/compressed_pair.hpp</filename>.</para>
+  <example xml:id="ex.compressedpair_01">
+    <title>Reduced memory requirements with <classname>boost::compressed_pair</classname></title>
+    <programlisting><xi:include href="../src/compressedpair_01/main.cpp" parse="text"/></programlisting>
+  </example>
+  <para><xref linkend="ex.compressedpair_01" xrefstyle="enp"/> illustrates this by using <classname>boost::compressed_pair</classname> for <varname>cp</varname> and <classname>std::pair</classname> for <varname>p</varname>. When compiled using Visual C++ 2013 and run on a 64-bit Windows 7 system, the example returns 4 for <code>sizeof(cp)</code> and 8 for <code>sizeof(p)</code>.</para>
+  <para>Please note that there is another difference between <classname>boost::compressed_pair</classname> and <classname>std::pair</classname>: the values stored in <classname>boost::compressed_pair</classname> are accessed through the member functions <methodname>first</methodname><indexterm><primary>compressed_pair::first</primary></indexterm><indexterm><primary>first, compressed_pair</primary></indexterm> and <methodname>second</methodname><indexterm><primary>compressed_pair::second</primary></indexterm><indexterm><primary>second, compressed_pair</primary></indexterm>. <classname>std::pair</classname> uses two identically named member variables instead.</para>
+</chapter>

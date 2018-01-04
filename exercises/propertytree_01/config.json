@@ -1,0 +1,17 @@
+{
+  "animals": [
+    {
+      "name": "cat",
+      "legs": 4,
+      "has_tail": true
+    },
+    {
+      "name": "spider",
+      "legs": 8,
+      "has_tail": false
+    }
+  ],
+  "log": {
+    "all": true
+  }
+}

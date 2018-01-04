@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="5.0" xml:lang="en" xml:id="boost.variant">
+  <title>Boost.Variant</title><indexterm><primary>Boost.Variant</primary></indexterm>
+  <para><link xlink:href="http://www.boost.org/libs/variant">Boost.Variant</link> provides a class called <classname>boost::variant</classname><indexterm><primary>variant, Boost.Variant</primary></indexterm> that resembles <code>union</code>. You can store values of different types in a <classname>boost::variant</classname> variable. At any point only one value can be stored. When a new value is assigned, the old value is overwritten. However, the new value may have a different type from the old value. The only requirement is that the types must have been passed as template parameters to <classname>boost::variant</classname> so they are known to the <classname>boost::variant</classname> variable.</para>
+  <para><classname>boost::variant</classname> supports any type. For example, it is possible to store a <classname>std::string</classname> in a <classname>boost::variant</classname> variable &#x2013; something that wasn’t possible with <code>union</code> before C++11. With C++11, the requirements for <code>union</code> were relaxed. Now a <code>union</code> can contain a <classname>std::string</classname>. Because a <classname>std::string</classname> must be initialized with placement new and has to be destroyed by an explicit call to the destructor, it can still make sense to use <classname>boost::variant</classname>, even in a C++11 development environment.</para>
+  <example xml:id="ex.variant_01">
+    <title>Using <classname>boost::variant</classname></title>
+    <programlisting><xi:include href="../src/variant_01/main.cpp" parse="text"/></programlisting>
+  </example>
+  <para><classname>boost::variant</classname> is defined in <filename class="headerfile">boost/variant.hpp</filename>. Because <classname>boost::variant</classname> is a template, at least one parameter must be specified. One or more template parameters specify the supported types. In <xref linkend="ex.variant_01" xrefstyle="enp" />, <varname>v</varname> can store values of type <type>double</type>, <type>char</type>, or <classname>std::string</classname>. However, if you tried to assign a value of type <type>int</type> to <varname>v</varname>, the resulting code would not compile.</para>
+  <example xml:id="ex.variant_02">
+    <title>Accessing values in <classname>boost::variant</classname> with <function>boost::get</function></title>
+    <programlisting><xi:include href="../src/variant_02/main.cpp" parse="text"/></programlisting>
+  </example>
+  <para>To display the stored values of <varname>v</varname>, use the free-standing function <function>boost::get</function><indexterm><primary>get, Boost.Variant</primary></indexterm> (see <xref linkend="ex.variant_02" xrefstyle="enp"/>).</para>
+  <para><function>boost::get</function> expects one of the valid types for the corresponding variable as a template parameter. Specifying an invalid type will result in a run-time error because validation of types does not take place at compile time.</para>
+  <para>Variables of type <classname>boost::variant</classname> can be written to streams such as the standard output stream, bypassing the hazard of run-time errors (see <xref linkend="ex.variant_03" xrefstyle="enp"/>).</para>
+  <example xml:id="ex.variant_03">
+    <title>Direct output of <classname>boost::variant</classname> on a stream</title>
+    <programlisting><xi:include href="../src/variant_03/main.cpp" parse="text"/></programlisting>
+  </example>
+  <para>For type-safe access, Boost.Variant provides a function called <function>boost::apply_visitor</function><indexterm><primary>apply_visitor, Boost.Variant</primary></indexterm>.</para>
+  <example xml:id="ex.variant_04">
+    <title>Using a visitor for <classname>boost::variant</classname></title>
+    <programlisting><xi:include href="../src/variant_04/main.cpp" parse="text"/></programlisting>
+  </example>
+  <para>As its first parameter, <function>boost::apply_visitor</function> expects an object of a class derived from <classname>boost::static_visitor</classname><indexterm><primary>static_visitor, Boost.Variant</primary></indexterm>. This class must overload <methodname role="operator">operator()</methodname> for every type used by the <classname>boost::variant</classname> variable it acts on. Consequently, the operator is overloaded three times in <xref linkend="ex.variant_04" xrefstyle="enp"/> because <varname>v</varname> supports the types <type>double</type>, <type>char</type>, and <classname>std::string</classname>.</para>
+  <para><classname>boost::static_visitor</classname> is a template. The type of the return value of <methodname role="operator">operator()</methodname> must be specified as a template parameter. If the operator does not have a return value, a template parameter is not required, as seen in the example.</para>
+  <para>The second parameter passed to <function>boost::apply_visitor</function> is a <classname>boost::variant</classname> variable.</para>
+  <para><function>boost::apply_visitor</function> automatically calls the <methodname role="operator">operator()</methodname> for the first parameter that matches the type of the value currently stored in the second parameter. This means that the sample program uses different overloaded operators every time <function>boost::apply_visitor</function> is invoked &#x2013; first the one for <type>double</type>, followed by the one for <type>char</type>, and finally the one for <classname>std::string</classname>.</para>
+  <para>The advantage of <function>boost::apply_visitor</function> is not only that the correct operator is called automatically. In addition, <function>boost::apply_visitor</function> ensures that overloaded operators have been provided for every type supported by <classname>boost::variant</classname> variables. If one of the three overloaded operators had not been defined, the code could not be compiled.</para>
+  <para>If overloaded operators are equivalent in functionality, the code can be simplified by using a template (see <xref linkend="ex.variant_05" xrefstyle="enp"/>).</para>
+  <example xml:id="ex.variant_05">
+    <title>Using a visitor with a function template for <classname>boost::variant</classname></title>
+    <programlisting><xi:include href="../src/variant_05/main.cpp" parse="text"/></programlisting>
+  </example>
+  <para>Because <function>boost::apply_visitor</function> ensures code correctness at compile time, it should be preferred over <function>boost::get</function>.</para>
+</chapter>

@@ -1,0 +1,2 @@
+exe test : main.cpp ..//boost_headers ..//boost_system ..//boost_chrono : <target-os>windows:<build>no <target-os>cygwin:<build>no ;
+stage . : test ;

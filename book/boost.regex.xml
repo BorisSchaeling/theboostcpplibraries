@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="5.0" xml:lang="en" xml:id="boost.regex">
+  <title>Boost.Regex</title><indexterm><primary>Boost.Regex</primary></indexterm>
+  <para><link xlink:href="http://www.boost.org/libs/regex">Boost.Regex</link> allows you to use <emphasis role="concept">regular expressions</emphasis><indexterm><primary>regular expression, Boost.Regex</primary></indexterm> in C++. As the library is part of the standard library since C++11, you don’t depend on Boost.Regex if your development environment supports C++11. You can use identically named classes and functions in the namespace <package>std</package> if you include the header file <filename class="headerfile">regex</filename>.</para>
+  <para>The two most important classes in Boost.Regex are <classname>boost::regex</classname><indexterm><primary>regex, Boost.Regex</primary></indexterm> and <classname>boost::smatch</classname><indexterm><primary>smatch, Boost.Regex</primary></indexterm>, both defined in <filename class="headerfile">boost/regex.hpp</filename>. The former defines a regular expression, and the latter saves the search results.</para>
+  <para>Boost.Regex provides three different functions to search for regular expressions.</para>
+  <example xml:id="ex.regex_01">
+    <title>Comparing strings with <function>boost::regex_match</function></title>
+    <programlisting><xi:include href="../src/regex_01/main.cpp" parse="text"/></programlisting>
+  </example>
+  <para><function>boost::regex_match</function><indexterm><primary>regex_match, Boost.Regex</primary></indexterm> (see <xref linkend="ex.regex_01" xrefstyle="enp"/>) compares a string with a regular expression. It will return <literal>true</literal> only if the expression matches the complete string.</para>
+  <para><function>boost::regex_search</function><indexterm><primary>regex_search, Boost.Regex</primary></indexterm> searches a string for a regular expression.</para>
+  <example xml:id="ex.regex_02">
+    <title>Searching strings with <function>boost::regex_search</function></title>
+    <programlisting><xi:include href="../src/regex_02/main.cpp" parse="text"/></programlisting>
+  </example>
+  <para><function>boost::regex_search</function> expects a reference to an object of type <classname>boost::smatch</classname> as an additional parameter, which is used to store the results. <function>boost::regex_search</function> only searches for groups. That’s why <xref linkend="ex.regex_02" xrefstyle="enp"/> returns two strings based on the two groups found in the regular expression.</para>
+  <para>The result storage class <classname>boost::smatch</classname> is a container holding elements of type <classname>boost::sub_match</classname>,<indexterm><primary>sub_match, Boost.Regex</primary></indexterm> which can be accessed through an interface similar to the one of <classname>std::vector</classname>. For example, elements can be accessed via <methodname role="operator">operator[]</methodname>.</para>
+  <para>The class <classname>boost::sub_match</classname> stores iterators to the specific positions in a string corresponding to the groups of a regular expression. Because <classname>boost::sub_match</classname> is derived from <classname>std::pair</classname>, the iterators that reference a particular substring can be accessed with <varname>first</varname> and <varname>second</varname>. However, to write a substring to the standard output stream, you don’t have to access these iterators (see <xref linkend="ex.regex_02" xrefstyle="enp"/>). Using the overloaded operator <methodname role="operator">operator&lt;&lt;</methodname>, the substring can be written directly to standard output.</para>
+  <para>Please note that because iterators are used to point to matched strings, <classname>boost::sub_match</classname> does not copy them. This implies that results are accessible only as long as the corresponding string, which is referenced by the iterators, exists.</para>
+  <para>Furthermore, please note that the first element of the container <classname>boost::smatch</classname> stores iterators referencing the string that matches the entire regular expression. The first substring that matches the first group is accessible at index 1.</para>
+  <para>The third function offered by Boost.Regex is <function>boost::regex_replace</function><indexterm><primary>regex_replace, Boost.Regex</primary></indexterm> (see <xref linkend="ex.regex_03" xrefstyle="enp"/>).</para>
+  <example xml:id="ex.regex_03">
+    <title>Replacing characters in strings with <function>boost::regex_replace</function></title>
+    <programlisting><xi:include href="../src/regex_03/main.cpp" parse="text"/></programlisting>
+  </example>
+  <para>In addition to the search string and the regular expression, <function>boost::regex_replace</function> needs a format that defines how substrings that match individual groups of the regular expression should be replaced. In case the regular expression does not contain any groups, the corresponding substrings are replaced one to one using the given format. Thus, <xref linkend="ex.regex_03" xrefstyle="enp"/> will output <computeroutput>_Boost_Libraries_</computeroutput>.</para>
+  <para><function>boost::regex_replace</function> always searches through the entire string for the regular expression. Thus, the program actually replaces all three spaces with underscores.</para>
+  <example xml:id="ex.regex_04">
+    <title>Format with references to groups in regular expressions</title>
+    <programlisting><xi:include href="../src/regex_04/main.cpp" parse="text"/></programlisting>
+  </example>
+  <para>The format can access substrings returned by groups of the regular expression. <xref linkend="ex.regex_04" xrefstyle="enp"/> uses this technique to swap the first and last word, displaying <computeroutput>Libraries Boost</computeroutput> as a result.</para>
+  <para>There are different standards for regular expressions and formats. Each of the three functions takes an additional parameter that allows you to select a specific standard. You can also specify whether or not special characters should be interpreted in a specific format or whether the format should replace the complete string that matches the regular expression.</para>
+  <example xml:id="ex.regex_05">
+    <title>Flags for formats</title>
+    <programlisting><xi:include href="../src/regex_05/main.cpp" parse="text"/></programlisting>
+  </example>
+  <para><xref linkend="ex.regex_05" xrefstyle="enp"/> passes the flag <code>boost::regex_constants::format_literal</code><indexterm><primary>regex_constants::format_literal</primary></indexterm><indexterm><primary>format_literal, regex_constants</primary></indexterm> as the fourth parameter to <function>boost::regex_replace</function> to suppress handling of special characters in the format. Because the complete string that matches the regular expression is replaced with the format, the output of <xref linkend="ex.regex_05" xrefstyle="enp"/> is <computeroutput>\2 \1</computeroutput>.</para>
+  <example xml:id="ex.regex_06">
+    <title>Iterating over strings with <classname>boost::regex_token_iterator</classname></title>
+    <programlisting><xi:include href="../src/regex_06/main.cpp" parse="text"/></programlisting>
+  </example>
+  <para>With <classname>boost::regex_token_iterator</classname><indexterm><primary>regex_token_iterator, Boost.Regex</primary></indexterm>, Boost.Regex provides a class to iterate over a string with a regular expression. In <xref linkend="ex.regex_06" xrefstyle="enp" /> the iteration returns the two words in <varname>s</varname>. <varname>it</varname> is initialized with iterators to <varname>s</varname> and the regular expression <quote>\w+</quote>. The default constructor creates an end iterator.</para>
+  <para><xref linkend="ex.regex_06" xrefstyle="enp"/> displays <computeroutput>Boost</computeroutput> and <computeroutput>Libraries</computeroutput>.</para>
+  <example xml:id="ex.regex_07">
+    <title>Accessing groups with <classname>boost::regex_token_iterator</classname></title>
+    <programlisting><xi:include href="../src/regex_07/main.cpp" parse="text"/></programlisting>
+  </example>
+  <para>You can pass a number as an additional parameter to the constructor of <classname>boost::regex_token_iterator</classname>. If 1 is passed, as in <xref linkend="ex.regex_07" xrefstyle="enp" />, the iterator returns the first group in the regular expression. Because the regular expression <quote>(\w)\w+</quote> is used, <xref linkend="ex.regex_07" xrefstyle="enp" /> writes the initials <computeroutput>B</computeroutput> and <computeroutput>L</computeroutput> to standard output.</para>
+  <para>If -1 is passed to <classname>boost::regex_token_iterator</classname>, the regular expression is the delimiter. An iterator initialized with -1 returns substrings that do not match the regular expression.</para>
+  <example xml:id="ex.regex_08">
+    <title>Linking a locale to a regular expression</title>
+    <programlisting><xi:include href="../src/regex_08/main.cpp" parse="text"/></programlisting>
+  </example>
+  <para><xref linkend="ex.regex_08" xrefstyle="enp"/> links a locale with <methodname>imbue</methodname><indexterm><primary>regex::imbue</primary></indexterm><indexterm><primary>imbue, regex</primary></indexterm> to <varname>expr</varname>. This is done to apply the regular expression to the string <quote>Boost kütüphaneleri,</quote> which is the Turkish translation of <quote>Boost Libraries.</quote> If umlauts should be parsed as valid letters, the locale must be set &#x2013; otherwise <function>boost::regex_match</function> returns <literal>false</literal>.</para>
+  <para>To use a locale of type <classname>std::locale</classname>, <varname>expr</varname> must be based on a class instantiated with the type <classname>boost::cpp_regex_traits</classname><indexterm><primary>cpp_regex_traits, Boost.Regex</primary></indexterm>. That’s why <xref linkend="ex.regex_08" xrefstyle="enp"/> doesn’t use <classname>boost::regex</classname> but instead uses <type>boost::basic_regex&lt;char, boost::cpp_regex_traits&lt;char&gt;&gt;</type>. With the second template parameter of <classname>boost::basic_regex</classname><indexterm><primary>basic_regex, Boost.Regex</primary></indexterm>, the parameter for <methodname>imbue</methodname> can be defined indirectly. Only with <classname>boost::cpp_regex_traits</classname> can a locale of type <classname>std::locale</classname> be passed to <methodname>imbue</methodname>.</para>
+  <note>
+    <para>If you want to run the example on a POSIX operating system, replace <quote>Turkish</quote> with <quote>tr_TR</quote>. Also make sure the locale for Turkish is installed.</para>
+  </note>
+  <para>Note that <classname>boost::regex</classname> is defined with a platform-dependent second template parameter. On Windows this parameter is <classname>boost::w32_regex_traits</classname><indexterm><primary>w32_regex_traits, Boost.Regex</primary></indexterm>, which allows an <acronym>LCID</acronym><indexterm><primary>LCID, Boost.Regex</primary></indexterm> to be passed to <methodname>imbue</methodname>. An <acronym>LCID</acronym> is a number that, on Windows, identifies a certain language and culture. If you want to write platform-independent code, you must use <classname>boost::cpp_regex_traits</classname> explicitly, as in <xref linkend="ex.regex_08" xrefstyle="enp"/>. Alternatively, you can define the macro <code>BOOST_REGEX_USE_CPP_LOCALE</code><indexterm><primary>BOOST_REGEX_USE_CPP_LOCALE, Boost.Regex</primary></indexterm>.</para>
+</chapter>

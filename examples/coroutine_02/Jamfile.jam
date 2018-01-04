@@ -1,0 +1,2 @@
+exe test : main.cpp ..//boost_headers ..//boost_coroutine ..//boost_context ..//boost_system ..//boost_thread : <target-os>cygwin:<build>no ;
+stage . : test ;

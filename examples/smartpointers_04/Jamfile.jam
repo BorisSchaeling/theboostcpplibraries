@@ -1,0 +1,2 @@
+exe test : main.cpp ..//boost_headers : <build>no <target-os>windows:<build>yes ;
+stage . : test ;

@@ -1,0 +1,2 @@
+exe test : main.cpp ..//boost_headers ..//boost_regex : <toolset>clang-3.3:<build>no ;
+stage . : test ;

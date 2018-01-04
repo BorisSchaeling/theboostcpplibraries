@@ -1,0 +1,31 @@
+import testing ;
+import numbers ;
+import path ;
+
+project : requirements <threading>multi <link>static <debug-symbols>off <toolset>msvc:<variant>release <toolset>msvc:<address-model>64 <toolset>gcc:<cxxflags>-std=c++0x <toolset>gcc:<linkflags>-lrt <toolset>clang:<cxxflags>-std=c++11 <toolset>clang:<define>BOOST_NO_CXX11_ALLOCATOR ;
+
+alias boost_headers : : : : <target-os>windows:<include>C:/boost_1_57_0 <target-os>cygwin:<include>C:/cygwin64/home/Boris/boost_1_57_0 <target-os>linux:<include>/home/boris/boost_1_57_0 ;
+alias boost_libs : : : : <target-os>windows:<search>C:/boost_1_57_0/stage/lib <target-os>cygwin:<search>C:/cygwin64/home/Boris/boost_1_57_0/stage/lib <target-os>linux:<search>/home/boris/boost_1_57_0/stage/lib ;
+searched-lib boost_atomic : boost_libs : <toolset>msvc:<name>libboost_atomic ;
+searched-lib boost_chrono : boost_libs : <toolset>msvc:<name>libboost_chrono ;
+searched-lib boost_context : boost_libs : <toolset>msvc:<name>libboost_context ;
+searched-lib boost_coroutine : boost_libs : <toolset>msvc:<name>libboost_coroutine ;
+searched-lib boost_date_time : boost_libs : <toolset>msvc:<name>libboost_date_time ;
+searched-lib boost_filesystem : boost_libs : <toolset>msvc:<name>libboost_filesystem ;
+searched-lib boost_graph : boost_libs : <toolset>msvc:<name>libboost_graph ;
+searched-lib boost_iostreams : boost_libs : <toolset>msvc:<name>libboost_iostreams ;
+searched-lib boost_log : boost_libs : <toolset>msvc:<name>libboost_log ;
+searched-lib boost_mpi : boost_libs : <toolset>msvc:<name>libboost_mpi ;
+searched-lib boost_program_options : boost_libs : <toolset>msvc:<name>libboost_program_options ;
+searched-lib boost_random : boost_libs : <toolset>msvc:<name>libboost_random ;
+searched-lib boost_regex : boost_libs : <toolset>msvc:<name>libboost_regex ;
+searched-lib boost_serialization : boost_libs : <toolset>msvc:<name>libboost_serialization ;
+searched-lib boost_system : boost_libs : <toolset>msvc:<name>libboost_system ;
+searched-lib boost_thread : boost_libs : <toolset>msvc:<name>libboost_thread ;
+searched-lib boost_timer : boost_libs : <toolset>msvc:<name>libboost_timer ;
+
+local dirs = [ path.glob . : *_* ] ;
+for local d in $(dirs)
+{
+  build-project $(d) ;
+}

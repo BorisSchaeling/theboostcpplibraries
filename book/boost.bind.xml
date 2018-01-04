@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="5.0" xml:lang="en" xml:id="boost.bind">
+  <title>Boost.Bind</title><indexterm><primary>Boost.Bind</primary></indexterm>
+  <para><link xlink:href="http://www.boost.org/libs/bind">Boost.Bind</link> is a library that simplifies and generalizes capabilities that originally required <function>std::bind1st</function> and <function>std::bind2nd</function>. These two functions were added to the standard library with C++98 and made it possible to connect functions even if their signatures aren’t compatible.</para>
+  <para>Boost.Bind was added to the standard library with C++11. If your development environment supports C++11, you will find the function <function>std::bind</function> in the header file <filename class="headerfile">functional</filename>. Depending on the use case, it may be better to use lambda functions or Boost.Phoenix than <function>std::bind</function> or Boost.Bind.</para>
+  <example xml:id="ex.bind_01">
+    <title><function>std::for_each</function> with a compatible function</title>
+    <programlisting><xi:include href="../src/bind_01/main.cpp" parse="text"/></programlisting>
+  </example>
+  <para>The third parameter of <function>std::for_each</function> is a function or function object that expects a sole parameter. In <xref linkend="ex.bind_01" xrefstyle="enp"/>, <function>std::for_each</function> passes the numbers in the container <varname>v</varname> as sole parameters, one after another, to <function>print</function>.</para>
+  <para>If you need to pass in a function whose signature doesn’t meet the requirements of an algorithm, it gets more difficult. For example, if you want <function>print</function> to accept an output stream as an additional parameter, you can no longer use it as is with <function>std::for_each</function>.</para>
+  <example xml:id="ex.bind_02">
+    <title><function>std::for_each</function> with <function>std::bind1st</function></title>
+    <programlisting><xi:include href="../src/bind_02/main.cpp" parse="text"/></programlisting>
+  </example>
+  <para>Like <xref linkend="ex.bind_01" xrefstyle="enp"/>, <xref linkend="ex.bind_02" xrefstyle="enp"/> writes all numbers in <varname>v</varname> to standard output. However, this time, the output stream is passed to <function>print</function> as a parameter. To do this, the function <function>print</function> is defined as a function object derived from <classname>std::binary_function</classname>.</para>
+  <para>With Boost.Bind, you don’t need to transform <function>print</function> from a function to a function object. Instead, you use the function template <function>boost::bind</function><indexterm><primary>bind, Boost.Bind</primary></indexterm>, which is defined in <filename class="headerfile">boost/bind.hpp</filename>.</para>
+  <example xml:id="ex.bind_03">
+    <title><function>std::for_each</function> with <function>boost::bind</function></title>
+    <programlisting><xi:include href="../src/bind_03/main.cpp" parse="text"/></programlisting>
+  </example>
+  <para><xref linkend="ex.bind_03" xrefstyle="enp" /> uses <function>print</function> as a function, not as a function object. Because <function>print</function> expects two parameters, the function can’t be passed directly to <function>std::for_each</function>. Instead, <function>boost::bind</function> is passed to <function>std::for_each</function> and <function>print</function> is passed as the first parameter to <function>boost::bind</function>.</para>
+  <para>Since <function>print</function> expects two parameters, those two parameters must also be passed to <function>boost::bind</function>. They are a pointer to <varname>std::cout</varname> and <varname>_1</varname><indexterm><primary>_1, Boost.Bind</primary></indexterm>.</para>
+  <para><varname>_1</varname> is a placeholder. Boost.Bind defines placeholders from <varname>_1</varname> to <varname>_9</varname>. These placeholders tell <function>boost::bind</function> to return a function object that expects as many parameters as the placeholder with the greatest number. If, as in <xref linkend="ex.bind_03" xrefstyle="enp"/>, only the placeholder <varname>_1</varname> is used, <function>boost::bind</function> returns an unary function object &#x2013; a function object that expects a sole parameter. This is required in this case since <function>std::for_each</function> passes only one parameter.</para>
+  <para><function>std::for_each</function> calls a unary function object. The value passed to the function object &#x2013; a number from the container <varname>v</varname> &#x2013; takes the position of the placeholder <varname>_1</varname>. <function>boost::bind</function> takes the number and the pointer to <varname>std::cout</varname> and forwards them to <function>print</function>.</para>
+  <para>Please note that <function>boost::bind</function>, like <function>std::bind1st</function> and <function>std::bind2nd</function>, takes parameters by value. To prevent the calling program from trying to copy <varname>std::cout</varname>, <function>print</function> expects a pointer to a stream. Boost.Ref provides a function which allows you to pass a parameter by reference.</para>
+  <para><xref linkend="ex.bind_04" xrefstyle="enp"/> illustrates how to define a binary function object with <function>boost::bind</function>. It uses the algorithm <function>std::sort</function>, which expects a binary function as its third parameter.</para>
+  <example xml:id="ex.bind_04">
+    <title><function>std::sort</function> with <function>boost::bind</function></title>
+    <programlisting><xi:include href="../src/bind_04/main.cpp" parse="text"/></programlisting>
+  </example>
+  <para>In <xref linkend="ex.bind_04" xrefstyle="enp"/>, a binary function object is created because the placeholder <varname>_2</varname> is used. The algorithm <function>std::sort</function> calls this binary function object with two values from the container <varname>v</varname> and evaluates the return value to sort the container. The function <function>compare</function> is defined to sort <varname>v</varname> in descending order.</para>
+  <para>Since <function>compare</function> is a binary function, it can be passed to <function>std::sort</function> directly. However, it can still make sense to use <function>boost::bind</function> because it lets you change the order of the parameters. For example, you can use <function>boost::bind</function> if you want to sort the container in ascending order but don’t want to change <function>compare</function>.</para>
+  <example xml:id="ex.bind_05">
+    <title><function>std::sort</function> with <function>boost::bind</function> and changed order of placeholders</title>
+    <programlisting><xi:include href="../src/bind_05/main.cpp" parse="text"/></programlisting>
+  </example>
+  <para><xref linkend="ex.bind_05" xrefstyle="enp"/> sorts <varname>v</varname> in ascending order simply by swapping the placeholders: <varname>_2</varname> is passed first and <varname>_1</varname> second.</para>
+</chapter>

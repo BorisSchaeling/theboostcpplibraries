@@ -1,0 +1,3 @@
+searched-lib z ;
+exe test : main.cpp ..//boost_headers ..//boost_iostreams z : <target-os>windows:<build>no ;
+stage . : test ;

@@ -1,0 +1,2 @@
+exe test : main.cpp ..//boost_headers ..//boost_graph : <toolset>gcc-4.6:<build>no ;
+stage . : test ;

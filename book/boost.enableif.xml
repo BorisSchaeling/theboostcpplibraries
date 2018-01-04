@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="5.0" xml:lang="en" xml:id="boost.enableif">
+  <title>Boost.EnableIf</title><indexterm><primary>Boost.EnableIf</primary></indexterm>
+  <para><link xlink:href="http://www.boost.org/libs/utility/enable_if.html">Boost.EnableIf</link> makes it possible to disable overloaded function templates or specialized class templates. Disabling means that the compiler ignores the respective templates. This helps to prevent ambiguous scenarios in which the compiler doesn’t know which overloaded function template to use. It also makes it easier to define templates that can be used not just for a certain type but for a group of types.</para>
+  <para>Since C++11, Boost.EnableIf has been part of the standard library. You can call the functions introduced in this chapter without using a Boost library; just include the header file <filename class="headerfile">type_traits</filename>.</para>
+  <example xml:id="ex.enableif_01">
+    <title>Overloading functions with <classname>boost::enable_if</classname> on their return value</title>
+    <programlisting><xi:include href="../src/enableif_01/main.cpp" parse="text"/></programlisting>
+  </example>
+  <para><xref linkend="ex.enableif_01" xrefstyle="enp"/> defines the function template <function>create</function>, which returns an object of the type passed as a template parameter. The object is initialized in <function>create</function>, which accepts no parameters. The signatures of the two <function>create</function> functions don’t differ. In that respect <function>create</function> isn’t an overloaded function. The compiler would report an error if Boost.EnableIf didn’t enable one function and disable the other.</para>
+  <para>Boost.EnableIf provides the class <classname>boost::enable_if</classname><indexterm><primary>enable_if, Boost.EnableIf</primary></indexterm>, which is a template that expects two parameters. The first parameter is a condition. The second parameter is the type of the <classname>boost::enable_if</classname> expression if the condition is true. The trick is that this type doesn’t exist if the condition is false, in which case the <classname>boost::enable_if</classname> expression is invalid C++ code. However, when it comes to templates, the compiler doesn’t complain about invalid code. Instead it ignores the template and searches for another one that might fit. This concept is known as <acronym>SFINAE</acronym> which stands for <quote>Substitution Failure Is Not An Error.</quote></para>
+  <para>In <xref linkend="ex.enableif_01" xrefstyle="enp"/> both conditions in the <classname>boost::enable_if</classname> expressions use the class <classname>std::is_same</classname>. This class is defined in the C++11 standard library and allows you to compare two types. Because such a comparison is either true or false, it’s sufficient to use <classname>std::is_same</classname> to define a condition.</para>
+  <para>If a condition is true, the respective <function>create</function> function should return an object of the type that was passed to <function>create</function> as a template parameter. That’s why <code>T</code> is passed as a second parameter to <classname>boost::enable_if</classname>. The entire <classname>boost::enable_if</classname> expression is replaced by <code>T</code> if the condition is true. In <xref linkend="ex.enableif_01" xrefstyle="enp"/> the compiler sees either a function that returns an <type>int</type> or a function that returns a <classname>std::string</classname>. If <function>create</function> is called with any other type than <type>int</type> or <classname>std::string</classname>, the compiler will report an error.</para>
+  <para><xref linkend="ex.enableif_01" xrefstyle="enp"/> displays <computeroutput>Boost</computeroutput>.</para>
+  <example xml:id="ex.enableif_02">
+    <title>Specializing functions for a group of types with <classname>boost::enable_if</classname></title>
+    <programlisting><xi:include href="../src/enableif_02/main.cpp" parse="text"/></programlisting>
+  </example>
+  <para><xref linkend="ex.enableif_02" xrefstyle="enp" /> uses <classname>boost::enable_if</classname> to specialize a function for a group of types. The function is called <function>print</function> and expects one parameter. It can be overloaded, although overloading requires you to use a concrete type. To do the same for a group of types like <type>short</type>, <type>int</type> or <type>long</type>, you can define an appropriate condition using <classname>boost::enable_if</classname>. <xref linkend="ex.enableif_02" xrefstyle="enp" /> uses <classname>std::is_integral</classname> to do so. The second <function>print</function> function is overloaded with <classname>std::is_floating_point</classname> for all floating point numbers.</para>
+  <simplesect role="exercises" xml:id="boost.enableif-exercises">
+    <title>Exercise</title>
+    <para>Make <function>print_has_post_increment</function> write to standard output whether a type supports the post-increment operator. For example, for <type>int</type> the program should output <quote>int has a post increment operator</quote>:</para>
+    <informalexample>
+      <programlisting><xi:include href="../exercises/enableif_01/main.cpp" parse="text"/></programlisting>
+    </informalexample>
+  </simplesect>
+</chapter>

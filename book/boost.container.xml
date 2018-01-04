@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="5.0" xml:lang="en" xml:id="boost.container">
+  <title>Boost.Container</title><indexterm><primary>Boost.Container</primary></indexterm>
+  <para><link xlink:href="http://www.boost.org/libs/container">Boost.Container</link> is a Boost library that provides the same containers as the standard library. Boost.Container focuses on additional flexibility. For example, all containers from this library can be used with Boost.Interprocess in shared memory &#x2013; something that is not always possible with containers from the standard library.</para>
+  <para>Boost.Container provides additional advantages:</para>
+  <itemizedlist>
+    <listitem>
+      <para>The interfaces of the containers resemble those of the containers in the C++11 standard library. For example, they provide member functions such as <methodname>emplace_back</methodname>, which you can use in a C++98 program even though it wasn’t added to the standard library until C++11.</para>
+    </listitem>
+    <listitem>
+      <para>With <classname>boost::container::slist</classname> or <classname>boost::container::stable_vector</classname>, Boost.Container offers containers the standard library doesn’t provide.</para>
+    </listitem>
+    <listitem>
+      <para>The implementation is platform independent. The containers behave the same everywhere. You don’t need to worry about possible differences between implementations of the standard library.</para>
+    </listitem>
+    <listitem>
+      <para>The containers from Boost.Container support <emphasis role="concept">incomplete types</emphasis><indexterm><primary>incomplete type, Boost.Container</primary></indexterm> and can be used to define recursive containers.</para>
+    </listitem>
+  </itemizedlist>
+  <para><xref linkend="ex.container_01" xrefstyle="enp"/> illustrates incomplete types.</para>
+  <note>
+    <para>The examples in this chapters cannot be compiled with Visual C++ 2013 and Boost 1.55.0. This bug is described in <link xlink:href="https://svn.boost.org/trac/boost/ticket/9332">ticket 9332</link>. It was fixed in Boost 1.56.0.</para>
+  </note>
+  <example xml:id="ex.container_01">
+    <title>Recursive containers with Boost.Container</title>
+    <programlisting><xi:include href="../src/container_01/main.cpp" parse="text"/></programlisting>
+  </example>
+  <para>The class <classname>animal</classname> has a member variable <varname>children</varname> of type <type>boost::container::vector&lt;animal&gt;</type>. <classname>boost::container::vector</classname> is defined in the header file <filename class="headerfile">boost/container/vector.hpp</filename>. Thus, the type of the member variable <varname>children</varname> is based on the class <classname>animal</classname>, which defines the variable <varname>children</varname>. At this point, <classname>animal</classname> hasn’t been defined completely. While the standard doesn’t require containers from the standard library to support incomplete types, recursive containers are explicitly supported by Boost.Container. Whether containers defined by the standard library can be used recursively is implementation dependent.</para>
+  <example xml:id="ex.container_02">
+    <title>Using <classname>boost::container::stable_vector</classname></title>
+    <programlisting><xi:include href="../src/container_02/main.cpp" parse="text"/></programlisting>
+  </example>
+  <para>Boost.Container provides containers in addition to the well-known containers from the standard library. <xref linkend="ex.container_02" xrefstyle="enp"/> introduces the container <classname>boost::container::stable_vector</classname><indexterm><primary>container::stable_vector</primary></indexterm><indexterm><primary>stable_vector, container</primary></indexterm>, which behaves similarly to <classname>std::vector</classname>, except that if <classname>boost::container::stable_vector</classname> is changed, all iterators and references to existing elements remain valid. This is possible because elements aren’t stored contiguously in <classname>boost::container::stable_vector</classname>. It is still possible to access elements with an index even though elements are not stored next to each other in memory.</para>
+  <para>Boost.Container guarantees that the reference <varname>i</varname> in <xref linkend="ex.container_02" xrefstyle="enp"/> remains valid when the first element in the vector is erased. The example displays <computeroutput>1</computeroutput>.</para>
+  <para>Please note that neither <classname>boost::container::stable_vector</classname> nor other containers from this library support C++11 initializer lists. In <xref linkend="ex.container_02" xrefstyle="enp"/> <varname>v</varname> is initialized with two elements both set to 1.</para>
+  <para><classname>boost::container::stable_vector</classname> is defined in <filename class="headerfile">boost/container/stable_vector.hpp</filename>.</para>
+  <para>Additional containers provided by Boost.Container are <classname>boost::container::flat_set</classname><indexterm><primary>container::flat_set</primary></indexterm><indexterm><primary>flat_set, container</primary></indexterm>, <classname>boost::container::flat_map</classname><indexterm><primary>container::flat_map</primary></indexterm><indexterm><primary>flat_map, container</primary></indexterm>, <classname>boost::container::slist</classname><indexterm><primary>container::slist</primary></indexterm><indexterm><primary>slist, container</primary></indexterm>, and <classname>boost::container::static_vector</classname><indexterm><primary>container::static_vector</primary></indexterm><indexterm><primary>static_vector, container</primary></indexterm>:</para>
+  <itemizedlist>
+    <listitem>
+      <para><classname>boost::container::flat_set</classname> and <classname>boost::container::flat_map</classname> resemble <classname>std::set</classname> and <classname>std::map</classname>. However they are implemented as sorted vectors, not as a tree. This allows faster lookups and iterations, but inserting and removing elements is more expensive.</para>
+      <para>These two containers are defined in the header files <filename class="headerfile">boost/container/flat_set.hpp</filename> and <filename class="headerfile">boost/container/flat_map.hpp</filename>.</para>
+    </listitem>
+    <listitem>
+      <para><classname>boost::container::slist</classname> is a singly linked list. It is similar to <classname>std::forward_list</classname>, which was added to the standard library with C++11. <classname>boost::container::slist</classname> provides a member function <methodname>size</methodname>, which is missing in <classname>std::forward_list</classname>.</para>
+      <para><classname>boost::container::slist</classname> is defined in <filename class="headerfile">boost/container/slist.hpp</filename>.</para>
+    </listitem>
+    <listitem>
+      <para><classname>boost::container::static_vector</classname> stores elements like <classname>std::array</classname> directly in the container. Like <classname>std::array</classname>, the container has a constant capacity, though the capacity doesn’t say anything about the number of elements. The member functions <methodname>push_back</methodname>, <methodname>pop_back</methodname>, <methodname>insert</methodname>, and <methodname>erase</methodname> are available to insert or remove elements. In this regard, <classname>boost::container::static_vector</classname> is similar to <classname>std::vector</classname>. The member function <methodname>size</methodname> returns the number of currently stored elements in the container.</para>
+      <para>The capacity is constant, but can be changed with <methodname>resize</methodname>. <methodname>push_back</methodname> doesn’t change the capacity. You may add an element with <methodname>push_back</methodname> only if the capacity is greater than the number of currently stored elements. Otherwise, <methodname>push_back</methodname> throws an exception of type <exceptionname>std::bad_alloc</exceptionname>.</para>
+      <para><classname>boost::container::static_vector</classname> is defined in <filename class="headerfile">boost/container/static_vector.hpp</filename>.</para>
+    </listitem>
+  </itemizedlist>
+</chapter>

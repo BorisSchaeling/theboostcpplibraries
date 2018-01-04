@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<colophon xmlns="http://docbook.org/ns/docbook" xmlns:xl="http://www.w3.org/1999/xlink" xmlns:xi="http://www.w3.org/2001/XInclude" version="5.0" xml:lang="en" xml:id="colophon">
+  <title>Colophon</title>
+  <bridgehead>About the Author</bridgehead>
+  <para><link xl:href="mailto:boris@theboostcpplibraries.com">Boris Schäling</link> is an active member of the Boost C++ community. He is a regular speaker at C++Now (formerly known as BoostCon) and Meeting C++, where he has given talks on the Boost libraries. He was administrator for Boost for the Google Summer of Code program. He is the driving force behind the C++ process management library in Boost and has contributed code to Boost.Asio that performs waits on Windows kernel objects.</para>
+  <para>His main interest in C++ is improving efficiency in software development projects and making C++ easier to use. He has worked as a consultant and trainer helping companies reach these goals using the Boost libraries. He has extensive international experience and is currently living in Amsterdam, the Netherlands.</para>
+  <bridgehead>About the Book</bridgehead>
+  <para>This book was authored using DocBook XML, Version 5.0. It was formatted using a customization of the standard <link xl:href="http://docbook.sourceforge.net">DocBook stylesheets</link>, the <link xl:href="http://saxon.sourceforge.net">Saxon XSLT processor</link>, and the <link xl:href="http://renderx.com">RenderX XEP Engine</link>.</para>
+  <bridgehead>About XML Press</bridgehead>
+  <para><link xl:href="http://xmlpress.net">XML Press</link> specializes in publications for technical communicators, their managers, marketers, and the engineers who support their work. We focus on concise, practical publications concerning social media, programming, management, XML technologies, and other topics of interest to our audience.</para>
+</colophon>

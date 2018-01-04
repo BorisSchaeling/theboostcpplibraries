@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="5.0" xml:lang="en" xml:id="boost.signals2">
+  <title>Boost.Signals2</title><indexterm><primary>Boost.Signals2</primary></indexterm>
+  <para><link xlink:href="http://www.boost.org/libs/signals2">Boost.Signals2</link> implements the signal/slot concept. One or multiple functions &#x2013; called <emphasis role="concept">slots</emphasis> &#x2013; are linked with an object that can emit a signal. Every time the signal is emitted, the linked functions are called.</para>
+  <para>The signal/slot concept can be useful when, for example, developing applications with graphical user interfaces. Buttons can be modelled so they emit a signal when a user clicks on them. They can support links to many functions to handle user input. That way it is possible to process events flexibly.</para>
+  <para><classname>std::function</classname> can also be used for event handling. One crucial difference between <classname>std::function</classname> and Boost.Signals2, is that Boost.Signals2 can associate more than one event handler with a single event. Therefore, Boost.Signals2 is better for supporting event-driven development and should be the first choice whenever events need to be handled.</para>
+  <para>Boost.Signals2 succeeds the library Boost.Signals, which is deprecated and not discussed in this book.</para>
+  <sect1 xml:id="boost.signals2-signals">
+    <title>Signals</title>
+    <para>Boost.Signals2 offers the class <classname>boost::signals2::signal</classname><indexterm><primary>signals2::signal</primary></indexterm><indexterm><primary>signal, signals2</primary></indexterm>, which can be used to create a signal. This class is defined in <filename class="headerfile">boost/signals2/signal.hpp</filename>. Alternatively, you can use the header file <filename class="headerfile">boost/signals2.hpp</filename>, which is a master header file that defines all of the classes and functions available in Boost.Signals2.</para>
+    <para>Boost.Signals2 defines <classname>boost::signals2::signal</classname> and other classes, as well as all functions in the namespace <package>boost::signals2</package>.</para>
+    <example xml:id="ex.signals2_01">
+      <title><quote>Hello, world!</quote> with <classname>boost::signals2::signal</classname></title>
+      <programlisting><xi:include href="../src/signals2_01/main.cpp" parse="text"/></programlisting>
+    </example>
+    <para><classname>boost::signals2::signal</classname> is a class template that expects as a template parameter the signature of the function that will be used as an event handler. In <xref linkend="ex.signals2_01" xrefstyle="enp"/>, only functions with a signature of <type>void()</type> can be associated with the signal <varname>s</varname>.</para>
+    <para>A lambda function is associated with the signal <varname>s</varname> through <methodname>connect</methodname><indexterm><primary>signals2::signal::connect</primary></indexterm><indexterm><primary>connect, signals2::signal</primary></indexterm>. Because the lambda function conforms to the required signature, <type>void()</type>, the association is successfully established. The lambda function is called whenever the signal <varname>s</varname> is triggered.</para>
+    <para>The signal is triggered by calling <varname>s</varname> like a regular function. The signature of this function matches the one passed as the template parameter. The brackets are empty because <type>void()</type> does not expect any parameters. Calling <varname>s</varname> results in a trigger that, in turn, executes the lambda function that was previously associated with <methodname>connect</methodname>.</para>
+    <para><xref linkend="ex.signals2_01" xrefstyle="enp"/> can also be implemented with <classname>std::function</classname>, as shown in <xref linkend="ex.signals2_02" xrefstyle="enp"/>.</para>
+    <example xml:id="ex.signals2_02">
+      <title><quote>Hello, world!</quote> with <classname>std::function</classname></title>
+      <programlisting><xi:include href="../src/signals2_02/main.cpp" parse="text"/></programlisting>
+    </example>
+    <para>In <xref linkend="ex.signals2_02" xrefstyle="enp"/>, the lambda function is also executed when <varname>f</varname> is called. While <classname>std::function</classname> can only be used in a scenario like <xref linkend="ex.signals2_02" xrefstyle="enp"/>, Boost.Signals2 provides far more variety. For example, it can associate multiple functions with a particular signal (see <xref linkend="ex.signals2_03" xrefstyle="enp" />).</para>
+    <example xml:id="ex.signals2_03">
+      <title>Multiple event handlers with <classname>boost::signals2::signal</classname></title>
+      <programlisting><xi:include href="../src/signals2_03/main.cpp" parse="text"/></programlisting>
+    </example>
+    <para><classname>boost::signals2::signal</classname> allows you to assign multiple functions to a particular signal by calling <methodname>connect</methodname> repeatedly. Whenever the signal is triggered, the functions are executed in the order in which they were associated with <methodname>connect</methodname>.</para>
+    <para>The order can also be explicitly defined with the help of an overloaded version of <methodname>connect</methodname>, which expects a value of type <type>int</type> as an additional parameter (<xref linkend="ex.signals2_04" xrefstyle="enp"/>).</para>
+    <example xml:id="ex.signals2_04">
+      <title>Event handlers with an explicit order</title>
+      <programlisting><xi:include href="../src/signals2_04/main.cpp" parse="text"/></programlisting>
+    </example>
+    <para>Like the previous example, <xref linkend="ex.signals2_04" xrefstyle="enp"/> displays <computeroutput>Hello, world!</computeroutput>.</para>
+    <para>To release an associated function from a signal, call <methodname>disconnect</methodname><indexterm><primary>signals2::signal::disconnect</primary></indexterm><indexterm><primary>disconnect, signals2::signal</primary></indexterm>.</para>
+    <example xml:id="ex.signals2_05">
+      <title>Disconnecting event handlers from <classname>boost::signals2::signal</classname></title>
+      <programlisting><xi:include href="../src/signals2_05/main.cpp" parse="text"/></programlisting>
+    </example>
+    <para><xref linkend="ex.signals2_05" xrefstyle="enp"/> only prints <computeroutput>Hello</computeroutput> because the association with <function>world</function> was released before the signal was triggered.</para>
+    <para>Besides <methodname>connect</methodname> and <methodname>disconnect</methodname>, <classname>boost::signals2::signal</classname> provides a few more member functions (see <xref linkend="ex.signals2_06" xrefstyle="enp"/>).</para>
+    <example xml:id="ex.signals2_06">
+      <title>Additional member functions of <classname>boost::signals2::signal</classname></title>
+      <programlisting><xi:include href="../src/signals2_06/main.cpp" parse="text"/></programlisting>
+    </example>
+    <para><methodname>num_slots</methodname><indexterm><primary>signals2::signal::num_slots</primary></indexterm><indexterm><primary>num_slots, signals2::signal</primary></indexterm> returns the number of associated functions. If no function is associated, <methodname>num_slots</methodname> returns 0. <methodname>empty</methodname><indexterm><primary>signals2::signal::empty</primary></indexterm><indexterm><primary>empty, signals2::signal</primary></indexterm> tells you whether event handlers are connected or not. And <methodname>disconnect_all_slots</methodname><indexterm><primary>signals2::signal::disconnect_all_slots</primary></indexterm><indexterm><primary>disconnect_all_slots, signals2::signal</primary></indexterm> does exactly what its name says: it releases all existing associations.</para>
+    <example xml:id="ex.signals2_07">
+      <title>Processing return values from event handlers</title>
+      <programlisting><xi:include href="../src/signals2_07/main.cpp" parse="text"/></programlisting>
+    </example>
+    <para>In <xref linkend="ex.signals2_07" xrefstyle="enp"/> two lambda functions are associated with the signal <varname>s</varname>. The first lambda function returns 1, the second returns 2.</para>
+    <para><xref linkend="ex.signals2_07" xrefstyle="enp"/> writes <computeroutput>2</computeroutput> to standard output. Both return values were correctly accepted by <varname>s</varname>, but all except the last one were ignored. By default, only the last return value of all associated functions is returned.</para>
+    <para>Please note that <code>s()</code> does not directly return the result of the last function called. An object of type <classname>boost::optional</classname> is returned, which when de-referenced returns the number 2. Triggering a signal that is not associated with any function does not yield any return value. Thus, in this case, <classname>boost::optional</classname> allows Boost.Signals2 to return an empty object. <classname>boost::optional</classname> is introduced in <xref linkend="boost.optional" xrefstyle="wtp"/>.</para>
+    <para>It is possible to customize a signal so that the individual return values are processed accordingly. To do this, a <emphasis role="concept">combiner</emphasis><indexterm><primary>combiner, Boost.Signals2</primary></indexterm> must be passed to <classname>boost::signals2::signal</classname> as a second template parameter.</para>
+    <example xml:id="ex.signals2_08">
+      <title>Finding the smallest return value with a user-defined combiner</title>
+      <programlisting><xi:include href="../src/signals2_08/main.cpp" parse="text"/></programlisting>
+    </example>
+    <para>A combiner is a class with an overloaded <methodname role="operator">operator()</methodname>. This operator is automatically called with two iterators, which are used to access the functions associated with the particular signal. When the iterators are de-referenced, the functions are called and their return values become available in the combiner. A common algorithm from the standard library, such as <function>std::min_element</function>, can then be used to calculate and return the smallest value (see <xref linkend="ex.signals2_08" xrefstyle="enp"/>).</para>
+    <para><classname>boost::signals2::signal</classname> uses <classname>boost::signals2::optional_last_value</classname><indexterm><primary>signals2::optional_last_value</primary></indexterm><indexterm><primary>optional_last_value, signals2</primary></indexterm> as the default combiner. This combiner returns objects of type <classname>boost::optional</classname>. A user can define a combiner with a return value of any type. For instance, the combiner <classname>min_element</classname> in <xref linkend="ex.signals2_08" xrefstyle="enp"/> returns the type passed as a template parameter to <classname>min_element</classname>.</para>
+    <para>It is not possible to pass an algorithm such as <function>std::min_element</function> as a template parameter directly to <classname>boost::signals2::signal</classname>. <classname>boost::signals2::signal</classname> expects that the combiner defines a type called <type>result_type</type>, which denotes the type of the value returned by <methodname role="operator">operator()</methodname>. Since this type is not defined by standard algorithms, the compiler will report an error.</para>
+    <para>Please note that it is not possible to pass the iterators <varname>first</varname> and <varname>last</varname> directly to <function>std::min_element</function> because this algorithm expects forward iterators, while combiners work with input iterators. That’s why a vector is used to store all return values before determining the smallest value with <function>std::min_element</function>.</para>
+    <para><xref linkend="ex.signals2_09" xrefstyle="enp"/> modifies the combiner to store all return values in a container, rather than evaluating them. It stores all the return values in a vector that is then returned by <code>s()</code>.</para>
+    <example xml:id="ex.signals2_09">
+      <title>Receiving all return values with a user-defined combiner</title>
+      <programlisting><xi:include href="../src/signals2_09/main.cpp" parse="text"/></programlisting>
+    </example>
+    <simplesect role="exercises" xml:id="boost.signals2-signals-exercises">
+      <title>Exercise</title>
+      <para>Create a program with a class <classname>button</classname>. The class should represent a button in a graphical user interface. Add the member functions <methodname>add_handler</methodname> and <methodname>remove_handler</methodname> which both expect a function to be passed. If another member function called <methodname>click</methodname> is invoked, registered handlers should be invoked one after another. Instantiate <classname>button</classname> and test the class by registering a handler that writes a message to standard output. Call <methodname>click</methodname> to simulate a mouse click on the button.</para>
+    </simplesect>
+  </sect1>
+  <sect1 xml:id="boost.signals2-connections">
+    <title>Connections</title>
+    <para>Functions can be managed with the aid of the <methodname>connect</methodname> and <methodname>disconnect</methodname> member functions provided by <classname>boost::signals2::signal</classname>. Because <methodname>connect</methodname> returns an object of type <classname>boost::signals2::connection</classname><indexterm><primary>signals2::connection</primary></indexterm><indexterm><primary>connection, signals2</primary></indexterm>, associations can also be managed differently (see <xref linkend="ex.signals2_10" xrefstyle="enp"/>).</para>
+    <example xml:id="ex.signals2_10">
+      <title>Managing connections with <classname>boost::signals2::connection</classname></title>
+      <programlisting><xi:include href="../src/signals2_10/main.cpp" parse="text"/></programlisting>
+    </example>
+    <para>The <methodname>disconnect</methodname> member function of <classname>boost::signals2::signal</classname> requires a function pointer to be passed in. Avoid this by calling <methodname>disconnect</methodname><indexterm><primary>signals2::connection::disconnect</primary></indexterm><indexterm><primary>disconnect, signals2::connection</primary></indexterm> on the <classname>boost::signals2::connection</classname> object.</para>
+    <para>To block a function for a short time without removing the association from the signal, <classname>boost::signals2::shared_connection_block</classname><indexterm><primary>signals2::shared_connection_block</primary></indexterm><indexterm><primary>shared_connection_block, signals2</primary></indexterm> can be used.</para>
+    <example xml:id="ex.signals2_11">
+      <title>Blocking connections with <classname>shared_connection_block</classname></title>
+      <programlisting><xi:include href="../src/signals2_11/main.cpp" parse="text"/></programlisting>
+    </example>
+    <para><xref linkend="ex.signals2_11" xrefstyle="enp"/> executes the lambda function twice. The signal <varname>s</varname> is triggered three times, but the lambda function is not called the second time because an object of type <classname>boost::signals2::shared_connection_block</classname> was created to block the call. Once the object goes out of scope, the block is automatically removed. A block can also be removed explicitly by calling <methodname>unblock</methodname><indexterm><primary>signals2::shared_connection_block::unblock</primary></indexterm><indexterm><primary>unblock, signals2::shared_connection_block</primary></indexterm>. Because it is called before the last trigger, the final call to the lambda function is executed again.</para>
+    <para>In addition to <methodname>unblock</methodname>, <classname>boost::signals2::shared_connection_block</classname> provides the member functions <methodname>block</methodname><indexterm><primary>signals2::shared_connection_block::block</primary></indexterm><indexterm><primary>block, signals2::shared_connection_block</primary></indexterm> and <methodname>blocking</methodname><indexterm><primary>signals2::shared_connection_block::blocking</primary></indexterm><indexterm><primary>blocking, signals2::shared_connection_block</primary></indexterm>. The former is used to block a connection after a call to <methodname>unblock</methodname>, while the latter makes it possible to check whether or not a connection is currently blocked.</para>
+    <para>Please note that <classname>boost::signals2::shared_connection_block</classname> carries the word <quote>shared</quote> for a reason: multiple objects of type <classname>boost::signals2::shared_connection_block</classname> can be initialized with the same connection.</para>
+    <example xml:id="ex.signals2_12">
+      <title>Blocking a connection multiple times</title>
+      <programlisting><xi:include href="../src/signals2_12/main.cpp" parse="text"/></programlisting>
+    </example>
+    <para><xref linkend="ex.signals2_12" xrefstyle="enp"/> accesses <varname>s</varname> twice, but the lambda function is only called the second time. The program writes <computeroutput>Hello, world!</computeroutput> to the standard output stream only once.</para>
+    <para>Because <literal>false</literal> is passed to the constructor as the second parameter, the first object of type <classname>boost::signals2::shared_connection_block</classname> does not block the connection to the signal <varname>s</varname>. Hence, calling <methodname>blocking</methodname> on the object <varname>b1</varname> returns <literal>false</literal>.</para>
+    <para>Nevertheless, the lambda function is not executed when <varname>s</varname> is first accessed because the access happens only after a second object of type <classname>boost::signals2::shared_connection_block</classname> has been instantiated. By not passing a second parameter to the constructor, the connection is blocked by the object. When <varname>s</varname> is accessed for the second time, the lambda function is executed because the block was automatically removed once <varname>b2</varname> went out of scope.</para>
+    <para>Boost.Signals2 can release a connection once the object whose member function is associated with a signal is destroyed.</para>
+    <example xml:id="ex.signals2_13">
+      <title>Member functions as event handlers</title>
+      <programlisting><xi:include href="../src/signals2_13/main.cpp" parse="text"/></programlisting>
+    </example>
+    <para><xref linkend="ex.signals2_13" xrefstyle="enp"/> associates the member function of an object with a signal, with the help of <function>std::bind</function>. The object is destroyed before the signal is triggered, which is a problem because, instead of passing an object of type <varname>world</varname>, only an address was passed to <function>std::bind</function>. By the time <code>s()</code> is called, the object referenced no longer exists.</para>
+    <para>It is possible to modify the program so that the connection is automatically released once the object is destroyed. <xref linkend="ex.signals2_14" xrefstyle="enp"/> does this.</para>
+    <example xml:id="ex.signals2_14">
+      <title>Releasing associated member functions automatically</title>
+      <programlisting><xi:include href="../src/signals2_14/main.cpp" parse="text"/></programlisting>
+    </example>
+    <para>Now <methodname>num_slots</methodname> returns <computeroutput>0</computeroutput>. <xref linkend="ex.signals2_14" xrefstyle="enp"/> does not try to call a member function on an object that doesn’t exist when the signal is triggered. The change was to tie the object of type <classname>world</classname> to a smart pointer of type <classname>boost::shared_ptr</classname>, which is passed to <methodname>track</methodname><indexterm><primary>signals2::signal::slot_type::track</primary></indexterm><indexterm><primary>track, signals2::signal::slot_type</primary></indexterm>. This member function is called on the slot that was passed to <methodname>connect</methodname> to request tracking on the corresponding object.</para>
+    <para>A function or member function associated with a signal is called a <emphasis role="concept">slot</emphasis>. The type to specify a slot was not used in the previous examples because passing a pointer to a function or member function to <methodname>connect</methodname> was sufficient. The corresponding slot was created and associated with the signal automatically.</para>
+    <para>In <xref linkend="ex.signals2_14" xrefstyle="enp" />, however, the smart pointer is associated with the slot by calling <methodname>track</methodname>. Because the type of the slot depends on the signal, <classname>boost::signals2::signal</classname> provides a type <type>slot_type</type> to access the required type. <type>slot_type</type> behaves just like <classname>std::bind</classname>, making it possible to pass both parameters to describe the slot directly. <methodname>track</methodname> can then be called to associate the slot with a smart pointer of type <classname>boost::shared_ptr</classname>. The object is then tracked, which causes the slot to be automatically removed once the tracked object is destroyed.</para>
+    <para>To manage objects with different smart pointers, slots provide a member function called <methodname>track_foreign</methodname><indexterm><primary>signals2::signal::slot_type::track_foreign</primary></indexterm><indexterm><primary>track_foreign, signals2::signal::slot_type</primary></indexterm>. While <methodname>track</methodname> expects a smart pointer of type <classname>boost::shared_ptr</classname>, <methodname>track_foreign</methodname> allows you to, for example, use a smart pointer of type <classname>std::shared_ptr</classname>. Smart pointers other than <classname>std::shared_ptr</classname> and <classname>std::weak_ptr</classname> must be introduced to Boost.Signals2 before they can be passed to <methodname>track_foreign</methodname>.</para>
+    <para>The consumer of a particular event can access an object of type <classname>boost::signals2::signal</classname> to create new associations or release existing ones.</para>
+    <example xml:id="ex.signals2_15">
+      <title>Creating new connections in an event handler</title>
+      <programlisting><xi:include href="../src/signals2_15/main.cpp" parse="text"/></programlisting>
+    </example>
+    <para><xref linkend="ex.signals2_15" xrefstyle="enp"/> accesses <varname>s</varname> inside the <function>connect</function> function to associate a lambda function with the signal. Since <function>connect</function> is called when the signal is triggered, the question is whether the lambda function will also be called.</para>
+    <para>The program does not output anything, which means the lambda function is never called. While Boost.Signals2 supports associating functions to signals when a signal is triggered, the new associations will only be used when the signal is triggered again.</para>
+    <example xml:id="ex.signals2_16">
+      <title>Releasing connections in an event handler</title>
+      <programlisting><xi:include href="../src/signals2_16/main.cpp" parse="text"/></programlisting>
+    </example>
+    <para><xref linkend="ex.signals2_16" xrefstyle="enp"/> does not create a new association, instead it releases an existing one. As in <xref linkend="ex.signals2_15" xrefstyle="enp"/>, this example writes nothing to the standard output stream.</para>
+    <para>This behavior can be explained quite simply. Imagine that a temporary copy of all slots is created whenever a signal is triggered. Newly created associations are not added to the temporary copy and therefore can only be called the next time the signal is triggered. Released associations, on the other hand, are still part of the temporary copy, but will be checked by the combiner when de-referenced to avoid calling a member function on an object that has already been destroyed.</para>
+  </sect1>
+  <sect1 xml:id="boost.signals2-multithreading">
+    <title>Multithreading</title>
+    <para>Almost all classes provided by Boost.Signals2 are thread safe and can be used in multithreaded applications. For example, objects of type <classname>boost::signals2::signal</classname> and <classname>boost::signals2::connection</classname> can be accessed from different threads.</para>
+    <para>On the other hand, <classname>boost::signals2::shared_connection_block</classname> is not thread safe. This limitation is not important because multiple objects of type <classname>boost::signals2::shared_connection_block</classname> can be created in different threads and can use the same connection object.</para>
+    <example xml:id="ex.signals2_17">
+      <title><classname>boost::signals2::signal</classname> is thread safe</title>
+      <programlisting><xi:include href="../src/signals2_17/main.cpp" parse="text"/></programlisting>
+    </example>
+    <para><xref linkend="ex.signals2_17" xrefstyle="enp"/> creates two threads that execute the <function>loop</function> function, which accesses <varname>s</varname> one hundred times to call the associated lambda function. Boost.Signals2 explicitly supports simultaneous access from different threads to objects of type <classname>boost::signals2::signal</classname>.</para>
+    <para><xref linkend="ex.signals2_17" xrefstyle="enp" /> displays numbers from 0 to 99. Because <varname>i</varname> is incremented in two threads and written to the standard output stream in the lambda function, the numbers will not only be displayed twice, they will also overlap. However, because <classname>boost::signals2::signal</classname> can be accessed from different threads, the program will not crash.</para>
+    <para>However, <xref linkend="ex.signals2_17" xrefstyle="enp"/> still requires synchronization. Because two threads access <varname>s</varname>, the associated lambda function runs in parallel in two threads. To avoid having the two threads interrupt each other while writing to standard output, a mutex is used to synchronize access to <varname>std::cout</varname>.</para>
+    <para>For single-threaded applications, support for multithreading can be disabled in Boost.Signals2.</para>
+    <example xml:id="ex.signals2_18">
+      <title><classname>boost::signals2::signal</classname> without thread safety</title>
+      <programlisting><xi:include href="../src/signals2_18/main.cpp" parse="text"/></programlisting>
+    </example>
+    <para>Out of the many template parameters supported by <classname>boost::signals2::signal</classname>, the last one defines the type of mutex used for synchronization. Fortunately, Boost.Signals2 offers a simpler way to disable synchronization than passing the complete list of parameters.</para>
+    <para>The <package>boost::signals2::keywords</package> namespace contains classes that make it possible to pass template parameters by name. <classname>boost::signals2::keywords::mutex_type</classname><indexterm><primary>signals2::keywords::mutex_type</primary></indexterm><indexterm><primary>mutex_type, signals2::keywords</primary></indexterm> can be used to pass the mutex type as the second template parameter to <classname>boost::signals2::signal_type</classname><indexterm><primary>signals2::signal_type</primary></indexterm><indexterm><primary>signal_type, signals2</primary></indexterm>. Please note that <classname>boost::signals2::signal_type</classname>, not <classname>boost::signals2::signal</classname>, must be used in this case. The type equivalent to <classname>boost::signals2::signal</classname>, which is required to define the signal <varname>s</varname>, is retrieved via <classname>boost::signals2::signal_type::type</classname><indexterm><primary>signals2::signal_type::type</primary></indexterm><indexterm><primary>type, signals2::signal_type</primary></indexterm>.</para>
+    <para>Boost.Signals2 provides an empty mutex implementation called <classname>boost::signals2::dummy_mutex</classname><indexterm><primary>signals2::dummy_mutex</primary></indexterm><indexterm><primary>dummy_mutex, signals2</primary></indexterm>. If a signal is defined with this class, it will no longer support multithreading (see <xref linkend="ex.signals2_18" xrefstyle="enp"/>).</para>
+  </sect1>
+</chapter>

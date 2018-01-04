@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="5.0" xml:lang="en" xml:id="boost.minmax">
+  <title>Boost.MinMax</title><indexterm><primary>Boost.MinMax</primary></indexterm>
+  <para><link xlink:href="http://www.boost.org/libs/algorithm/minmax">Boost.MinMax</link> provides an algorithm to find the minimum and the maximum of two values using only one function call, which is more efficient than calling <function>std::min</function> and <function>std::max</function>.</para>
+  <para>Boost.MinMax is part of C++11. You find the algorithms from this Boost library in the header file <filename class="headerfile">algorithm</filename> if your development environment supports C++11.</para>
+  <example xml:id="ex.minmax_01">
+    <title>Using <function>boost::minmax</function></title>
+    <programlisting><xi:include href="../src/minmax_01/main.cpp" parse="text"/></programlisting>
+  </example>
+  <para><function>boost::minmax</function><indexterm><primary>minmax, Boost.MinMax</primary></indexterm> computes the minimum and maximum of two objects. While both <function>std::min</function> and <function>std::max</function> return only one value, <function>boost::minmax</function> returns two values as a tuple. The first reference in the tuple points to the minimum and the second to the maximum. <xref linkend="ex.minmax_01" xrefstyle="enp"/> writes <computeroutput>1</computeroutput> and <computeroutput>2</computeroutput> to the standard output stream.</para>
+  <para><function>boost::minmax</function> is defined in <filename class="headerfile">boost/algorithm/minmax.hpp</filename>.</para>
+  <example xml:id="ex.minmax_02">
+    <title>Using <function>boost::minmax_element</function></title>
+    <programlisting><xi:include href="../src/minmax_02/main.cpp" parse="text"/></programlisting>
+  </example>
+  <para>Just as the standard library offers algorithms to find the minimum and maximum values in a container, Boost.MinMax offers the same functionality with only one call to the function <function>boost::minmax_element</function><indexterm><primary>minmax_element, Boost.MinMax</primary></indexterm>.</para>
+  <para>Unlike <function>boost::minmax</function>, <function>boost::minmax_element</function> returns a <classname>std::pair</classname> containing two iterators. The first iterator points to the minimum and the second points to the maximum. Thus, <xref linkend="ex.minmax_02" xrefstyle="enp"/> writes <computeroutput>0</computeroutput> and <computeroutput>3</computeroutput> to the standard output stream.</para>
+  <para><function>boost::minmax_element</function> is defined in <filename class="headerfile">boost/algorithm/minmax_element.hpp</filename>.</para>
+  <para>Both <function>boost::minmax</function> and <function>boost::minmax_element</function> can be called with a third parameter that specifies how objects should be compared. Thus, these functions can be used like the algorithms from the standard library.</para>
+</chapter>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="5.0" xml:lang="en" xml:id="boost.tokenizer">
+  <title>Boost.Tokenizer</title><indexterm><primary>Boost.Tokenizer</primary></indexterm>
+  <para>The library <link xlink:href="http://www.boost.org/libs/tokenizer">Boost.Tokenizer</link> allows you to iterate over partial expressions in a string by interpreting certain characters as separators.</para>
+  <example xml:id="ex.tokenizer_01">
+    <title>Iterating over partial expressions in a string with <classname>boost::tokenizer</classname></title>
+    <programlisting><xi:include href="../src/tokenizer_01/main.cpp" parse="text"/></programlisting>
+  </example>
+  <para>Boost.Tokenizer defines a class template called <classname>boost::tokenizer</classname><indexterm><primary>tokenizer, Boost.Tokenizer</primary></indexterm> in <filename class="headerfile">boost/tokenizer.hpp</filename>. It expects as a template parameter a class that identifies coherent expressions. <xref linkend="ex.tokenizer_01" xrefstyle="enp"/> uses the class <classname>boost::char_separator</classname><indexterm><primary>char_separator, Boost.Tokenizer</primary></indexterm>, which interprets spaces and punctuation marks as separators.</para>
+  <para>A tokenizer must be initialized with a string of type <classname>std::string</classname>. Using the member functions <methodname>begin</methodname><indexterm><primary>tokenizer::begin</primary></indexterm><indexterm><primary>begin, tokenizer</primary></indexterm> and <methodname>end</methodname><indexterm><primary>tokenizer::end</primary></indexterm><indexterm><primary>end, tokenizer</primary></indexterm>, the tokenizer can be accessed like a container. Partial expressions of the string used to initialize the tokenizer are available via iterators. How partial expressions are evaluated depends on the kind of class passed as the template parameter.</para>
+  <para>Because <classname>boost::char_separator</classname> interprets spaces and punctuation marks as separators by default, <xref linkend="ex.tokenizer_01" xrefstyle="enp"/> displays <computeroutput>Boost</computeroutput>, <computeroutput>C</computeroutput>, <computeroutput>+</computeroutput>, <computeroutput>+</computeroutput>, and <computeroutput>Libraries</computeroutput>. <classname>boost::char_separator</classname> uses <function>std::isspace</function> and <function>std::ispunct</function> to identify separator characters. Boost.Tokenizer distinguishes between separators that should be displayed and separators that should be suppressed. By default, spaces are suppressed and punctuation marks are displayed.</para>
+  <example xml:id="ex.tokenizer_02">
+    <title>Initializing <classname>boost::char_separator</classname> to adapt the iteration</title>
+    <programlisting><xi:include href="../src/tokenizer_02/main.cpp" parse="text"/></programlisting>
+  </example>
+  <para>To keep punctuation marks from being interpreted as separators, initialize the <classname>boost::char_separator</classname> object before passing it to the tokenizer.</para>
+  <para>The constructor of <classname>boost::char_separator</classname> accepts a total of three parameters, but only the first one is required. The first parameter describes the individual separators that are suppressed. <xref linkend="ex.tokenizer_02" xrefstyle="enp"/>, like <xref linkend="ex.tokenizer_01" xrefstyle="enp"/>, treats spaces as separators.</para>
+  <para>The second parameter specifies the separators that should be displayed. If this parameter is omitted, no separators are displayed, and the program will now display <computeroutput>Boost</computeroutput>, <computeroutput>C++</computeroutput> and <computeroutput>Libraries</computeroutput>.</para>
+  <example xml:id="ex.tokenizer_03">
+    <title>Simulating the default behavior with <classname>boost::char_separator</classname></title>
+    <programlisting><xi:include href="../src/tokenizer_03/main.cpp" parse="text"/></programlisting>
+  </example>
+  <para>If a plus sign is passed as the second parameter, <xref linkend="ex.tokenizer_03" xrefstyle="enp"/> behaves like <xref linkend="ex.tokenizer_01" xrefstyle="ewp"/>.</para>
+  <para>The third parameter determines whether or not empty partial expressions are displayed. If two separators are found back-to-back, the corresponding partial expression is empty. By default, these empty expressions are not displayed. Using the third parameter, the default behavior can be changed.</para>
+  <example xml:id="ex.tokenizer_04">
+    <title>Initializing <classname>boost::char_separator</classname> to display empty partial expressions</title>
+    <programlisting><xi:include href="../src/tokenizer_04/main.cpp" parse="text"/></programlisting>
+  </example>
+  <para><xref linkend="ex.tokenizer_04" xrefstyle="enp"/> displays two additional empty partial expressions. The first one is found between the two plus signs, while the second one is found between the second plus sign and the following space.</para>
+  <example xml:id="ex.tokenizer_05">
+    <title>Boost.Tokenizer with wide strings</title>
+    <programlisting><xi:include href="../src/tokenizer_05/main.cpp" parse="text"/></programlisting>
+  </example>
+  <para><xref linkend="ex.tokenizer_05" xrefstyle="enp" /> iterates over a string of type <classname>std::wstring</classname>. In order to support this string type, the tokenizer must be initialized with additional template parameters. The class <classname>boost::char_separator</classname> must also be initialized with <type>wchar_t</type>.</para>
+  <para>Besides <classname>boost::char_separator</classname>, Boost.Tokenizer provides two additional classes to identify partial expressions.</para>
+  <example xml:id="ex.tokenizer_06">
+    <title>Parsing CSV files with <classname>boost::escaped_list_separator</classname></title>
+    <programlisting><xi:include href="../src/tokenizer_06/main.cpp" parse="text"/></programlisting>
+  </example>
+  <para><classname>boost::escaped_list_separator</classname><indexterm><primary>escaped_list_separator, Boost.Tokenizer</primary></indexterm> is used to read multiple values separated by commas. This format is commonly known as <acronym>CSV</acronym><indexterm><primary>CSV, Boost.Tokenizer</primary><see>comma separated values</see></indexterm> (Comma Separated Values<indexterm><primary>comma separated values, Boost.Tokenizer</primary></indexterm>). <classname>boost::escaped_list_separator</classname> also handles double quotes and escape sequences. Therefore, the output of <xref linkend="ex.tokenizer_06" xrefstyle="enp"/> is <computeroutput>Boost</computeroutput> and <computeroutput>C++ Libraries</computeroutput>.</para>
+  <para>The second class provided is <classname>boost::offset_separator</classname><indexterm><primary>offset_separator, Boost.Tokenizer</primary></indexterm>, which must be instantiated. The corresponding object must be passed to the constructor of <classname>boost::tokenizer</classname> as a second parameter.</para>
+  <example xml:id="ex.tokenizer_07">
+    <title>Iterating over partial expressions with <classname>boost::offset_separator</classname></title>
+    <programlisting><xi:include href="../src/tokenizer_07/main.cpp" parse="text"/></programlisting>
+  </example>
+  <para><classname>boost::offset_separator</classname> specifies the locations within the string where individual partial expressions end. <xref linkend="ex.tokenizer_07" xrefstyle="enp"/> specifies that the first partial expression ends after 5 characters, the second ends after an additional 5 characters, and the third ends after the following 9 characters. The output will be <computeroutput>Boost</computeroutput>, <computeroutput>_C++_</computeroutput> and <computeroutput>Libraries</computeroutput>.</para>
+</chapter>

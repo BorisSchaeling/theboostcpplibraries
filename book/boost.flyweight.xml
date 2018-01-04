@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="5.0" xml:lang="en" xml:id="boost.flyweight">
+  <title>Boost.Flyweight</title><indexterm><primary>Boost.Flyweight</primary></indexterm>
+  <para><link xlink:href="http://www.boost.org/libs/flyweight">Boost.Flyweight</link> is a library that makes it easy to use the design pattern of the same name. Flyweight helps save memory when many objects share data. With this design pattern, instead of storing the same data multiple times in objects, shared data is kept in just one place, and all objects refer to that data. While you can implement this design pattern with, for example, pointers, it is easier to use Boost.Flyweight.</para>
+  <example xml:id="ex.flyweight_01">
+    <title>A hundred thousand identical strings without Boost.Flyweight</title>
+    <programlisting><xi:include href="../src/flyweight_01/main.cpp" parse="text"/></programlisting>
+  </example>
+  <para><xref linkend="ex.flyweight_01" xrefstyle="enp"/> creates a hundred thousand objects of type <classname>person</classname>. <classname>person</classname> defines two member variables: <varname>id_</varname> identifies persons, and <varname>city_</varname> stores the city people live in. In this example, all people live in Berlin. That’s why <varname>city_</varname> is set to <quote>Berlin</quote> in all hundred thousand objects. Thus, the example uses a hundred thousand strings all set to the same value. With Boost.Flyweight, one string &#x2013; instead of thousands &#x2013; can be used and memory consumption reduced.</para>
+  <example xml:id="ex.flyweight_02">
+    <title>One string instead of a hundred thousand strings with Boost.Flyweight</title>
+    <programlisting><xi:include href="../src/flyweight_02/main.cpp" parse="text"/></programlisting>
+  </example>
+  <para>To use Boost.Flyweight, include <filename class="headerfile">boost/flyweight.hpp</filename>, as in <xref linkend="ex.flyweight_02" xrefstyle="enp"/>. Boost.Flyweight provides additional header files that only need to be included if you need to change the detailed library settings.</para>
+  <para>All classes and functions are in the namespace <package>boost::flyweights</package>. <xref linkend="ex.flyweight_02" xrefstyle="enp"/> only uses the class <classname>boost::flyweights::flyweight</classname><indexterm><primary>flyweights::flyweight</primary></indexterm><indexterm><primary>flyweight, flyweights</primary></indexterm>, which is the most important class in this library. The member variable <varname>city_</varname> uses the type <type>flyweight&lt;std::string&gt;</type> rather than <classname>std::string</classname>. This is all you need to change to use this design pattern and reduce the memory requirements of the program.</para>
+  <example xml:id="ex.flyweight_03">
+    <title>Using <classname>boost::flyweights::flyweight</classname> multiple times</title>
+    <programlisting><xi:include href="../src/flyweight_03/main.cpp" parse="text"/></programlisting>
+  </example>
+  <para><xref linkend="ex.flyweight_03" xrefstyle="enp"/> adds a second member variable, <varname>country_</varname>, to the class <classname>person</classname>. This member variable contains the names of the countries people live in. Since, in this example, all people live in Berlin, they all live in the same country. That’s why <classname>boost::flyweights::flyweight</classname> is used in the definition of the member variable <varname>country_</varname>, too.</para>
+  <para>Boost.Flyweight uses an internal container to store objects. It makes sure there can’t be multiple objects with same values. By default, Boost.Flyweight uses a hash container such as <classname>std::unordered_set</classname>. For different types, different hash containers are used. As in <xref linkend="ex.flyweight_03" xrefstyle="enp"/>, both member variables <varname>city_</varname> and <varname>country_</varname> are strings; therefore, only one container is used. In this example, this is not a problem because the container only stores two strings: <quote>Berlin</quote> and <quote>Germany.</quote> If many different cities and countries must be stored, it would be better to store cities in one container and countries in another.</para>
+  <example xml:id="ex.flyweight_04">
+    <title>Using <classname>boost::flyweights::flyweight</classname> multiple times with tags</title>
+    <programlisting><xi:include href="../src/flyweight_04/main.cpp" parse="text"/></programlisting>
+  </example>
+  <para><xref linkend="ex.flyweight_04" xrefstyle="enp" /> passes a second template parameter to <classname>boost::flyweights::flyweight</classname>. This is a <emphasis role="concept">tag</emphasis><indexterm><primary>tag, Boost.Flyweight</primary></indexterm>. Tags are arbitrary types only used to differentiate the types on which <varname>city_</varname> and <varname>country_</varname> are based. <xref linkend="ex.flyweight_04" xrefstyle="enp" /> defines two empty structures <classname>city</classname> and <classname>country</classname>, which are used as tags. However, the example could have instead used <type>int</type>, <type>bool</type>, or any type.</para>
+  <para>The tags make <varname>city_</varname> and <varname>country_</varname> use different types. Now two hash containers are used by Boost.Flyweight &#x2013; one stores cities, the other stores countries.</para>
+  <example xml:id="ex.flyweight_05">
+    <title>Template parameters of <classname>boost::flyweights::flyweight</classname></title>
+    <programlisting><xi:include href="../src/flyweight_05/main.cpp" parse="text"/></programlisting>
+  </example>
+  <para>Template parameters other than tags can be passed to <classname>boost::flyweights::flyweight</classname>. <xref linkend="ex.flyweight_05" xrefstyle="enp"/> passes <classname>boost::flyweights::set_factory</classname><indexterm><primary>flyweights::set_factory</primary></indexterm><indexterm><primary>set_factory, flyweights</primary></indexterm>, <classname>boost::flyweights::no_locking</classname><indexterm><primary>flyweights::no_locking</primary></indexterm><indexterm><primary>no_locking, flyweights</primary></indexterm>, and <classname>boost::flyweights::no_tracking</classname><indexterm><primary>flyweights::no_tracking</primary></indexterm><indexterm><primary>no_tracking, flyweights</primary></indexterm>. Additional header files are included to make use of these classes.</para>
+  <para><classname>boost::flyweights::set_factory</classname> tells Boost.Flyweight to use a sorted container, such as <classname>std::set</classname>, rather than a hash container. With <classname>boost::flyweights::no_locking</classname>, support for multithreading, which is normally activated by default, is deactivated. <classname>boost::flyweights::no_tracking</classname> tells Boost.Flyweight to not track objects stored in internal containers. By default, when objects are no longer used, Boost.Flyweight detects this and removes them from the containers. When <classname>boost::flyweights::no_tracking</classname> is set, the detection mechanism is disabled. This improves performance. However, containers can only grow and will never shrink.</para>
+  <para>Boost.Flyweight supports additional settings. Check the official documentation if you are interested in more details on tuning.</para>
+  <simplesect role="exercises" xml:id="boost.flyweight-exercises">
+    <title>Exercise</title>
+    <para>Improve this program with Boost.Flyweight. Use Boost.Flyweight with disabled support for multithreading:</para>
+    <informalexample>
+      <programlisting><xi:include href="../exercises/flyweight_01/main.cpp" parse="text"/></programlisting>
+    </informalexample>
+  </simplesect>
+</chapter>

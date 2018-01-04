@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="5.0" xml:lang="en" xml:id="boost.tuple">
+  <title>Boost.Tuple</title><indexterm><primary>Boost.Tuple</primary></indexterm>
+  <para>The library <link xlink:href="http://www.boost.org/libs/tuple">Boost.Tuple</link> provides a class called <classname>boost::tuple</classname><indexterm><primary>tuple, Boost.Tuple</primary></indexterm>, which is a generalized version of <classname>std::pair</classname>. While <classname>std::pair</classname> can only store exactly two values, <classname>boost::tuple</classname> lets you choose how many values to store.</para>
+  <para>The standard library has provided the class <classname>std::tuple</classname> since C++11. If you work with a development environment supporting C++11, you can ignore Boost.Tuple because <classname>boost::tuple</classname> and <classname>std::tuple</classname> are identical.</para>
+  <example xml:id="ex.tuple_01">
+    <title><classname>boost::tuple</classname> replacing <classname>std::pair</classname></title>
+    <programlisting><xi:include href="../src/tuple_01/main.cpp" parse="text"/></programlisting>
+  </example>
+  <para>To use <classname>boost::tuple</classname>, include the header file <filename class="headerfile">boost/tuple/tuple.hpp</filename>. To use tuples with streams, include the header file <filename class="headerfile">boost/tuple/tuple_io.hpp</filename>. Boost.Tuple doesn’t provide a master header file that automatically includes all others.</para>
+  <para><classname>boost::tuple</classname> is used in the same way <classname>std::pair</classname> is. In <xref linkend="ex.tuple_01" xrefstyle="enp" />, a tuple containing one value of type <classname>std::string</classname> and one value of type <type>int</type> is created. This type is called <type>animal</type>, and it stores the name and the number of legs of an animal.</para>
+  <para>While the definition of type <type>animal</type> could have used <classname>std::pair</classname>, objects of type <classname>boost::tuple</classname> can be written to a stream. To do this you must include the header file <filename class="headerfile">boost/tuple/tuple_io.hpp</filename>, which provides the required operators. <xref linkend="ex.tuple_01" xrefstyle="enp"/> displays <computeroutput>(cat 4)</computeroutput>.</para>
+  <example xml:id="ex.tuple_02">
+    <title><classname>boost::tuple</classname> as the better <classname>std::pair</classname></title>
+    <programlisting><xi:include href="../src/tuple_02/main.cpp" parse="text"/></programlisting>
+  </example>
+  <para><xref linkend="ex.tuple_02" xrefstyle="enp"/> stores a name, the number of legs, and a flag that indicates whether the animal has a tail. All three values are placed in a tuple. When executed, this program displays <computeroutput>(cat 4 true)</computeroutput>.</para>
+  <para>You can create a tuple using the helper function <function>boost::make_tuple</function><indexterm><primary>make_tuple, Boost.Tuple</primary></indexterm>, which works like the helper function <function>std::make_pair</function> for <classname>std::pair</classname> (see <xref linkend="ex.tuple_03" xrefstyle="enp"/>).</para>
+  <example xml:id="ex.tuple_03">
+    <title>Creating tuples with <function>boost::make_tuple</function></title>
+    <programlisting><xi:include href="../src/tuple_03/main.cpp" parse="text"/></programlisting>
+  </example>
+  <para>A tuple can also contain references, as shown in <xref linkend="ex.tuple_04" xrefstyle="enp"/>.</para>
+  <example xml:id="ex.tuple_04">
+    <title>Tuples with references</title>
+    <programlisting><xi:include href="../src/tuple_04/main.cpp" parse="text"/></programlisting>
+  </example>
+  <para>The values 4 and <literal>true</literal> are passed by value and, thus, are stored directly inside the tuple, However, the first element is a reference to the string <varname>s</varname>. The function <function>boost::ref</function> from Boost.Ref is used to create the reference. To create a constant reference, use <function>boost::cref</function>.</para>
+  <para>Usually, you can use <function>std::ref</function> from the C++11 standard library instead of <function>boost::ref</function>. However, <xref linkend="ex.tuple_04" xrefstyle="enp"/> uses <function>boost::ref</function> because only Boost.Ref provides an operator to write to standard output.</para>
+  <para><classname>std::pair</classname> uses the member variables <varname>first</varname> and <varname>second</varname> to provide access. Because a tuple does not have a fixed number of elements, access must be handled differently.</para>
+  <example xml:id="ex.tuple_05">
+    <title>Reading elements of a tuple</title>
+    <programlisting><xi:include href="../src/tuple_05/main.cpp" parse="text"/></programlisting>
+  </example>
+  <para>There are two ways to access values in a tuple. You can call the member function <methodname>get</methodname><indexterm><primary>tuple::get</primary></indexterm><indexterm><primary>get, tuple</primary></indexterm>, or you can pass the tuple to the free-standing function <function>boost::get</function><indexterm><primary>get, Boost.Tuple</primary></indexterm>. In both cases, the index of the corresponding element in the tuple must be provided as a template parameter. <xref linkend="ex.tuple_05" xrefstyle="enp"/> accesses the first element of the tuple <varname>a</varname> in both cases and, thus, displays <computeroutput>cat</computeroutput> twice.</para>
+  <para>Specifying an invalid index results in a compiler error because index validity is checked at compile time.</para>
+  <para>The member function <methodname>get</methodname> and the free-standing function <function>boost::get</function> both return a reference that allows you to change a value inside a tuple.</para>
+  <example xml:id="ex.tuple_06">
+    <title>Writing elements of a tuple</title>
+    <programlisting><xi:include href="../src/tuple_06/main.cpp" parse="text"/></programlisting>
+  </example>
+  <para><xref linkend="ex.tuple_06" xrefstyle="enp"/> modifies the animal’s name and, thus, displays <computeroutput>(dog 4 true)</computeroutput>.</para>
+  <para>Boost.Tuple also defines comparison operators. To compare tuples, include the header file <filename class="headerfile">boost/tuple/tuple_comparison.hpp</filename>.</para>
+  <example xml:id="ex.tuple_07">
+    <title>Comparing tuples</title>
+    <programlisting><xi:include href="../src/tuple_07/main.cpp" parse="text"/></programlisting>
+  </example>
+  <para><xref linkend="ex.tuple_07" xrefstyle="enp"/> displays <computeroutput>true</computeroutput> because the tuples <varname>a1</varname> and <varname>a2</varname> are different.</para>
+  <para>The header file <filename class="headerfile">boost/tuple/tuple_comparison.hpp</filename> also contains definitions for other comparison operators such as greater-than, which performs a lexicographical comparison.</para>
+  <para>Boost.Tuple supports a specific form of tuples called <emphasis role="concept">tier</emphasis><indexterm><primary>tier, Boost.Tuple</primary></indexterm>. Tiers are tuples whose elements are all reference types. They can be constructed with the function <function>boost::tie</function><indexterm><primary>tie, Boost.Tuple</primary></indexterm>.</para>
+  <example xml:id="ex.tuple_08">
+    <title>Creating a tier with <function>boost::tie</function></title>
+    <programlisting><xi:include href="../src/tuple_08/main.cpp" parse="text"/></programlisting>
+  </example>
+  <para><xref linkend="ex.tuple_08" xrefstyle="enp"/> creates a tier <varname>a</varname>, which consists of references to the variables <varname>name</varname>, <varname>legs</varname>, and <varname>tail</varname>. When the variable <varname>name</varname> is modified, the tier is modified at the same time.</para>
+  <para><xref linkend="ex.tuple_08" xrefstyle="enp"/> could have also been written using <function>boost::make_tuple</function> and <function>boost::ref</function> (see <xref linkend="ex.tuple_09" xrefstyle="enp"/>).</para>
+  <example xml:id="ex.tuple_09">
+    <title>Creating a tier without <function>boost::tie</function></title>
+    <programlisting><xi:include href="../src/tuple_09/main.cpp" parse="text"/></programlisting>
+  </example>
+  <para><function>boost::tie</function> shortens the syntax. This function can also be used to unpack tuples. In <xref linkend="ex.tuple_10" xrefstyle="enp"/>, the individual values of the tuple, returned by a function, are instantly stored in variables.</para>
+  <example xml:id="ex.tuple_10">
+    <title>Unpacking return values of a function from a tuple</title>
+    <programlisting><xi:include href="../src/tuple_10/main.cpp" parse="text"/></programlisting>
+  </example>
+  <para><function>boost::tie</function> stores the string <quote>cat</quote> and the number 4, both of which are returned as a tuple from <function>new_cat</function>, in the variables <varname>name</varname> and <varname>legs</varname>.</para>
+</chapter>

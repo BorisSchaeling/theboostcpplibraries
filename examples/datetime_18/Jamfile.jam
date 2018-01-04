@@ -1,0 +1,2 @@
+exe test : main.cpp ..//boost_headers ..//boost_date_time ;
+stage . : test ;

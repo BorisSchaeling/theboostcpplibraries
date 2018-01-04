@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="5.0" xml:lang="en" xml:id="boost.function">
+  <title>Boost.Function</title><indexterm><primary>Boost.Function</primary></indexterm>
+  <para><link xlink:href="http://www.boost.org/libs/function">Boost.Function</link> provides a class called <classname>boost::function</classname><indexterm><primary>function, Boost.Function</primary></indexterm> to encapsulate function pointers. It is defined in <filename class="headerfile">boost/function.hpp</filename>.</para>
+  <para>If you work in a development environment supporting C++11, you have access to the class <classname>std::function</classname> from the header file <filename class="headerfile">functional</filename>. In this case you can ignore Boost.Function because <classname>boost::function</classname> and <classname>std::function</classname> are equivalent.</para>
+  <example xml:id="ex.function_01">
+    <title>Using <classname>boost::function</classname></title>
+    <programlisting><xi:include href="../src/function_01/main.cpp" parse="text"/></programlisting>
+  </example>
+  <para><classname>boost::function</classname> makes it possible to define a pointer to a function with a specific signature. <xref linkend="ex.function_01" xrefstyle="enp" /> defines a pointer <varname>f</varname> that can point to functions that expect a parameter of type <type>const char*</type> and return a value of type <type>int</type>. Once defined, functions with matching signatures can be assigned to the pointer. <xref linkend="ex.function_01" xrefstyle="enp" /> first assigns the function <function>std::atoi</function> to <varname>f</varname> before <function>std::strlen</function> is assigned to <varname>f</varname>.</para>
+  <para>Please note that types do not need to match exactly. Even though <function>std::strlen</function> uses <type>std::size_t</type> as its return type, it can still be assigned to <varname>f</varname>.</para>
+  <para>Because <varname>f</varname> is a function pointer, the assigned function can be called using <methodname role="operator">operator()</methodname>. Depending on what function is currently assigned, either <function>std::atoi</function> or <function>std::strlen</function> is called.</para>
+  <para>If <varname>f</varname> is called without having a function assigned, an exception of type <exceptionname>boost::bad_function_call</exceptionname><indexterm><primary>bad_function_call, Boost.Function</primary></indexterm> is thrown (see <xref linkend="ex.function_02" xrefstyle="enp"/>).</para>
+  <example xml:id="ex.function_02">
+    <title><exceptionname>boost::bad_function_call</exceptionname> thrown if <classname>boost::function</classname> is empty</title>
+    <programlisting><xi:include href="../src/function_02/main.cpp" parse="text"/></programlisting>
+  </example>
+  <para>Note that assigning <code>nullptr</code> to a function pointer of type <classname>boost::function</classname> releases any currently assigned function. Calling it after it has been released will result in a <exceptionname>boost::bad_function_call</exceptionname> exception being thrown. To check whether or not a function pointer is currently assigned to a function, you can use the member functions <methodname>empty</methodname><indexterm><primary>function::empty</primary></indexterm><indexterm><primary>empty, function</primary></indexterm> or <methodname role="operator">operator bool</methodname><indexterm><primary>function::operator bool</primary></indexterm><indexterm><primary>operator bool, function</primary></indexterm>.</para>
+  <para>It is also possible to assign class member functions to objects of type <classname>boost::function</classname> (see <xref linkend="ex.function_03" xrefstyle="enp"/>).</para>
+  <example xml:id="ex.function_03">
+    <title>Binding a class member function to <classname>boost::function</classname></title>
+    <programlisting><xi:include href="../src/function_03/main.cpp" parse="text"/></programlisting>
+  </example>
+  <para>When calling such a function, the first parameter passed indicates the particular object for which the function is called. Therefore, the first parameter after the open parenthesis inside the template definition must be a pointer to that particular class. The remaining parameters denote the signature of the corresponding member function.</para>
+</chapter>

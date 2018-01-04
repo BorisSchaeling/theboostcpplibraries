@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="5.0" xml:lang="en" xml:id="boost.foreach">
+  <title>Boost.Foreach</title><indexterm><primary>Boost.Foreach</primary></indexterm>
+  <para><link xlink:href="http://www.boost.org/libs/foreach">Boost.Foreach</link> provides a macro that simulates the range-based <code>for</code> loop from C++11. You can use the macro <code>BOOST_FOREACH</code>,<indexterm><primary>BOOST_FOREACH, Boost.Foreach</primary></indexterm> defined in <filename class="headerfile">boost/foreach.hpp</filename>, to iterate over a sequence without using iterators. If your development environment supports C++11, you can ignore Boost.Foreach.</para>
+  <example xml:id="ex.foreach_01">
+    <title>Using <code>BOOST_FOREACH</code> and <code>BOOST_REVERSE_FOREACH</code></title>
+    <programlisting><xi:include href="../src/foreach_01/main.cpp" parse="text"/></programlisting>
+  </example>
+  <para><code>BOOST_FOREACH</code> expects two parameters. The first parameter is a variable or reference, and the second is a sequence. The type of the first parameter needs to match the type of the elements in the sequence.</para>
+  <para>Anything offering iterators, such as containers from the standard library, classifies as a sequence. Boost.Foreach uses Boost.Range instead of directly accessing the member functions <methodname>begin</methodname> and <methodname>end</methodname>. However, because Boost.Range is based on iterators, anything providing iterators is compatible with <code>BOOST_FOREACH</code>.</para>
+  <para><xref linkend="ex.foreach_01" xrefstyle="enp"/> iterates over an array of type <classname>std::array</classname> with <code>BOOST_FOREACH</code>. The first parameter passed is a reference so that you can both read and modify the elements in the array. In <xref linkend="ex.foreach_01" xrefstyle="enp"/>, the first loop multiplies each number by itself.</para>
+  <para>The second loop uses the macro <code>BOOST_REVERSE_FOREACH</code><indexterm><primary>BOOST_REVERSE_FOREACH, Boost.Foreach</primary></indexterm>, which works the same as <code>BOOST_FOREACH</code>, but iterates backwards over a sequence. The loop writes the numbers 9, 4, 1, and 0 in that order to the standard output stream.</para>
+  <para>As usual, curly brackets can be omitted if the block only consists of one statement.</para>
+  <para>Please note that you should not use operations that invalidate the iterator inside the loop. For example, elements should not be added or removed while iterating over a vector. <code>BOOST_FOREACH</code> and <code>BOOST_REVERSE_FOREACH</code> require iterators to be valid throughout the whole iteration.</para>
+</chapter>

@@ -1,0 +1,5 @@
+searched-lib mpi : : <name>mpich : : <target-os>linux:<include>/usr/include/mpi ;
+searched-lib mpl ;
+searched-lib cr : : <link>shared ;
+exe test : main.cpp ..//boost_headers ..//boost_mpi mpi mpl cr : <target-os>windows:<build>no <target-os>cygwin:<build>no ;
+stage . : test ;

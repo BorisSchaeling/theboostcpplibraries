@@ -1,0 +1,433 @@
+<?xml version="1.0" encoding="utf-8"?>
+<preface xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="5.0" xml:lang="en" xml:id="introduction">
+  <title>Introduction</title>
+  <para>The <link xlink:href="http://www.boost.org/doc/libs/">Boost C++ Libraries</link> are a collection of modern libraries based on the C++ standard. The source code is released under the <link xlink:href="http://www.boost.org/LICENSE_1_0.txt">Boost Software License</link>, which allows anyone to use, modify, and distribute the libraries for free. The libraries are platform independent and support most popular compilers, as well as many that are less well known.</para>
+  <para>The Boost community is responsible for developing and publishing the Boost libraries. The community consists of a relatively large group of C++ developers from around the world coordinated through the web site <link xlink:href="http://www.boost.org/">www.boost.org</link> as well as several mailing lists. <link xlink:href="https://github.com/boostorg">GitHub</link> is used as the code repository. The mission statement of the community is to develop and collect high-quality libraries that complement the standard library. Libraries that prove of value and become important for the development of C++ applications stand a good chance of being included in the standard library at some point.</para>
+  <para>The Boost community emerged around 1998, when the first version of the standard was released. It has grown continuously since then and now plays a big role in the standardization of C++. Even though there is no formal relationship between the Boost community and the standardization committee, some of the developers are active in both groups. The current version of the C++ standard, which was approved in 2011, includes libraries that have their roots in the Boost community.</para>
+  <para>The Boost libraries are a good choice to increase productivity in C++ projects when your requirements go beyond what is available in the standard library. Because the Boost libraries evolve faster than the standard library, you have earlier access to new developments, and you don’t need to wait until those developments have been added to a new version of the standard library. Thus, you can benefit from progress made in the evolution of C++ faster, thanks to the Boost libraries.</para>
+  <para>Due to the excellent reputation of the Boost libraries, knowing them well can be a valuable skill for engineers. It is not unusual to be asked about the Boost libraries in an interview because developers who know these libraries are usually also familiar with the latest innovations in C++ and are able to write and understand modern C++ code.</para>
+  <sect1 xml:id="introduction-development-process">
+    <title>Development Process</title>
+    <para>The development of the Boost libraries is only possible because individual developers and organizations vigorously support them. Because Boost only accepts libraries that solve existing problems, exhibit a convincing design, are developed using modern C++, and are documented in an understandable way, each Boost library has a lot of work behind it.</para>
+    <para>C++ developers can participate in the Boost community and propose new libraries. However, a lot of time and effort is required to convert an idea into a Boost library. Thus, it is vitally important to discuss requirements and possible solutions with other developers and potential users on the Boost mailing lists.</para>
+    <para>Besides new libraries, it is also possible to nominate existing C++ libraries for inclusion into Boost. However, because the requirements for these libraries are the same as for libraries explicitly developed for Boost, changes may be required before new libraries are accepted.</para>
+    <para>Whether or not a library gets accepted into Boost depends on the outcome of the review process. Developers of libraries can apply for a review, which usually takes about 10 days. During the review, other developers are asked to rate the library. Based on the number of positive and negative reviews, the review manager decides whether or not to accept the library into Boost. Since some reviewers may be seeing the proposed new library for the first time, it is not uncommon for modifications to be required. </para>
+    <para>If a library is rejected for technical reasons, it is still possible to revise the library and request a new review for an updated version. However, if the reason a library was rejected is because it does not solve any practical problem or because it provides an unconvincing solution to an existing problem, there is a good chance that it will be rejected in another review.</para>
+    <para>Because new libraries can be accepted at any time, a new version of the Boost libraries is released every three months. This makes sure that developers benefit from improvements in the Boost libraries regularly and promptly.</para>
+    <note>
+      <para>This book is based on the Boost libraries 1.55.0 and 1.56.0. Version 1.55.0 was released in November 2013. Because the Boost community switched from Subversion to Git at the end of 2013 and needed time to adapt the release process, the next version, 1.56.0, was only released in August 2014. This happened two weeks before this book went into production. Since 1.55.0 was the latest version for nine months, this book is based on Boost 1.55.0. However, all examples have been tested with Boost 1.56.0, and all examples can be compiled with either Boost 1.55.0 or 1.56.0.</para>
+    </note>
+  </sect1>
+  <sect1 xml:id="introduction-installation">
+    <title>Installation</title>
+    <para>The Boost libraries come as source code. While most of the libraries consist solely of header files that can be used directly, some of the libraries require compilation. In order to make installation as easy as possible, an automated installation process based on <application class="software">Boost.Build</application><indexterm><primary>Boost.Build</primary></indexterm> is available. Instead of validating and compiling individual libraries separately, <application class="software">Boost.Build</application> installs the complete set automatically. <application class="software">Boost.Build</application> can be used with many operating systems and compilers and is able to compile each individual library based on appropriate configuration files.</para>
+    <para>To automatically install the Boost libraries with <application class="software">Boost.Build</application>, the command-line program <command>bjam</command> is used. The Boost libraries ship this program as source code and not as an executable. Therefore, two steps are required to build and install the Boost libraries. After you download the Boost libraries, change to the Boost directory and enter the following commands on the command line:</para>
+    <orderedlist>
+      <listitem>
+        <para>Enter <userinput>bootstrap</userinput> on Windows and <userinput>./bootstrap.sh</userinput> on other platforms, such as Linux, to compile <command>bjam</command>. The script automatically searches for a C compiler to build <command>bjam</command>.</para>
+      </listitem>
+      <listitem>
+        <para>Then, enter <userinput>bjam</userinput> on Windows and <userinput>./bjam</userinput> on other platforms to start installing the Boost libraries.</para>
+      </listitem>
+    </orderedlist>
+    <para>You use <command>bootstrap</command> only once to build <command>bjam</command>. However, you might need to use <command>bjam</command> more often because <command>bjam</command> supports command-line options to build the Boost libraries in different ways. If you start <command>bjam</command> without any command-line options, a default configuration will be used. Because the default configuration is not always appropriate, you should know the most important command-line options:</para>
+    <itemizedlist>
+      <listitem>
+        <para>The command-line options <literal>stage</literal> and <literal>install</literal> specify whether the Boost libraries are installed in a subdirectory called <filename class="directory">stage</filename> or are made available system wide. The meaning of system wide depends on the operating system. On Windows, the target directory is <filename class="directory">C:\Boost</filename>; on Linux it is <filename class="directory">/usr/local</filename>. The target directory can also be specified with the <option>--prefix</option> option. Starting <command>bjam</command> without command-line options always means <literal>stage</literal>.</para>
+      </listitem>
+      <listitem>
+        <para>If <command>bjam</command> is called without any command-line options, it will search for a suitable C++ compiler. A specific compiler can be selected using the <option>--toolset</option> option. To select Visual C++ 2013 on Windows, call <command>bjam</command> with <option>--toolset=msvc-12.0</option>. To select the GCC compiler on Linux, use <option>--toolset=gcc</option>.</para>
+      </listitem>
+      <listitem>
+        <para>The command-line option <option>--build-type</option> determines which build types of the libraries are created. By default, this option is set to <literal>minimal</literal>, meaning that only release builds are created. This may become an issue for developers who want to create debug builds of their projects with Visual C++ or GCC. Because these compilers automatically try to link against the debug builds of the Boost libraries, an error message will be displayed. In this case the option <option>--build-type</option> should be set to <literal>complete</literal> to generate both debug and release builds of the Boost libraries. This can take quite some time, which is why <literal>complete</literal> is not the default.</para>
+      </listitem>
+      <listitem>
+        <para>Boost libraries that have to be compiled are made available on Windows with file names that contain version numbers and various tokens. They make it possible, for example, to tell whether a library has been built as a debug or release variant. <filename class="libraryfile">libboost_atomic-vc120-mt-gd-1_56</filename> is such a file name. This library was built with Visual C++ 2013. It belongs to the Boost libraries 1.56.0. It is a debug variant and can be used in multithreaded programs. With the command-line option <option>--layout</option>, <command>bjam</command> can be told to generate other file names. For example, if you set it to <literal>system</literal>, the same file would be called <filename class="libraryfile">libboost_atomic</filename>. On Linux, <literal>system</literal> is the default setting. If you want file names on Linux to be the same as those generated on Windows by default, set <option>--layout</option> to <literal>versioned</literal>.</para>
+      </listitem>
+    </itemizedlist>
+    <para>To create both debug and release builds of the Boost libraries with Visual C++ 2013 and install them in the directory <filename class="directory">D:\Boost</filename>, enter the following command:</para>
+    <literallayout><command>bjam --toolset=msvc-12.0 --build-type=complete --prefix=D:\Boost install</command></literallayout>
+    <para>To build them on Linux and install them in the default directory, the command would be:</para>
+    <literallayout><command>bjam --toolset=gcc --build-type=complete install</command></literallayout>
+    <para>There are many other command-line options that you can use to specify in detail how to compile the Boost libraries. Have a look at the following command:</para>
+    <literallayout><command>bjam --toolset=msvc-12.0 debug release link=static runtime-link=shared install</command></literallayout>
+    <para>The <literal>debug</literal> and <literal>release</literal> options cause both debug and release builds to be generated. <literal>link=static</literal> only creates static libraries. <literal>runtime-link=shared</literal> specifies that the C++ runtime library is dynamically linked, which is the default setting for projects in Visual C++ 2013.</para>
+  </sect1>
+  <sect1 xml:id="introduction-overview">
+    <title>Overview</title>
+    <para>There are more than a hundred Boost libraries. This book discusses the following libraries in detail:</para>
+    <table border="0" cellspacing="0" width="100%" xml:id="covered-libraries">
+      <?dbfo keep-together="auto"?>
+      <caption>Covered libraries</caption>
+      <col width="28%"/>
+      <col width="22%" align="center"/>
+      <col width="50%"/>
+      <tr>
+        <th scope="col"><emphasis role="strong">Boost library</emphasis></th>
+        <th scope="col"><emphasis role="strong">Standard</emphasis></th>
+        <th scope="col"><emphasis role="strong">Short description</emphasis></th>
+      </tr>
+      <tr>
+        <td><link linkend="boost.accumulators">Boost.Accumulators</link></td>
+        <td></td>
+        <td>Boost.Accumulators provides accumulators to which numbers can be added to get, for example, the mean or the standard deviation.</td>
+      </tr>
+      <tr>
+        <td><link linkend="boost.algorithm">Boost.Algorithm</link></td>
+        <td></td>
+        <td>Boost.Algorithm provides various algorithms that complement the algorithms from the standard library.</td>
+      </tr>
+      <tr>
+        <td><link linkend="boost.any">Boost.Any</link></td>
+        <td/>
+        <td>Boost.Any provides a type called <classname>boost::any</classname>, which can store objects of arbitrary types.</td>
+      </tr>
+      <tr>
+        <td><link linkend="boost.array">Boost.Array</link></td>
+        <td><acronym>TR1</acronym>, C++11</td>
+        <td>Boost.Array makes it possible to treat C++ arrays like containers from the standard library.</td>
+      </tr>
+      <tr>
+        <td><link linkend="boost.asio">Boost.Asio</link></td>
+        <td/>
+        <td>Boost.Asio allows you to develop applications, such as network applications, that process data asynchronously.</td>
+      </tr>
+      <tr>
+        <td><link linkend="boost.assign">Boost.Assign</link></td>
+        <td></td>
+        <td>Boost.Assign provides helper functions to add multiple values to a container without having to call member functions like <methodname>push_back</methodname> repeatedly.</td>
+      </tr>
+      <tr>
+        <td><link linkend="boost.atomic">Boost.Atomic</link></td>
+        <td>C++11</td>
+        <td>Boost.Atomic defines the class <classname>boost::atomic</classname> to perform atomic operations on integral values. The library is used in multithreaded applications that need to share integral values between threads.</td>
+      </tr>
+      <tr>
+        <td><link linkend="boost.bimap">Boost.Bimap</link></td>
+        <td/>
+        <td>Boost.Bimap provides a class called <classname>boost::bimap</classname>, which is similar to <classname>std::map</classname>. The crucial difference is that <classname>boost::bimap</classname> allows you to search for both key and value.</td>
+      </tr>
+      <tr>
+        <td><link linkend="boost.bind">Boost.Bind</link></td>
+        <td><acronym>TR1</acronym>, C++11</td>
+        <td>Boost.Bind is an adapter for passing functions as template parameters, even if the function signature is incompatible with the expected template parameter.</td>
+      </tr>
+      <tr>
+        <td><link linkend="boost.chrono">Boost.Chrono</link></td>
+        <td>C++11</td>
+        <td>Boost.Chrono defines numerous clocks to get values such as the current time or the CPU time.</td>
+      </tr>
+      <tr>
+        <td><link linkend="boost.circularbuffer">Boost.CircularBuffer</link></td>
+        <td/>
+        <td>Boost.CircularBuffer offers a circular container with a constant memory size.</td>
+      </tr>
+      <tr>
+        <td><link linkend="boost.compressed_pair">Boost.CompressedPair</link></td>
+        <td></td>
+        <td>Boost.CompressedPair provides the data structure <classname>boost::compressed_pair</classname>, which is similar to <classname>std::pair</classname> but needs less memory when template parameters are empty classes.</td>
+      </tr>
+      <tr>
+        <td><link linkend="boost.container">Boost.Container</link></td>
+        <td></td>
+        <td>Boost.Container defines all of the containers from the standard library, plus additional containers like <classname>boost::container::slist</classname>.</td>
+      </tr>
+      <tr>
+        <td><link linkend="boost.conversion">Boost.Conversion</link></td>
+        <td/>
+        <td>Boost.Conversion provides two cast operators to perform downcasts and cross casts.</td>
+      </tr>
+      <tr>
+        <td><link linkend="boost.coroutine">Boost.Coroutine</link></td>
+        <td></td>
+        <td>Boost.Coroutine makes it possible to use coroutines in C++. Coroutines are often used in other programming languages using the keyword <code>yield</code>.</td>
+      </tr>
+      <tr>
+        <td><link linkend="boost.datetime">Boost.DateTime</link></td>
+        <td/>
+        <td>Boost.DateTime can be used to process, read, and write date and time values.</td>
+      </tr>
+      <tr>
+        <td><link linkend="boost.dynamicbitset">Boost.DynamicBitset</link></td>
+        <td/>
+        <td>Boost.DynamicBitset provides a structure similar to <classname>std::bitset</classname>, except that it is configured at run time.</td>
+      </tr>
+      <tr>
+        <td><link linkend="boost.enableif">Boost.EnableIf</link></td>
+        <td>C++11</td>
+        <td>Boost.EnableIf makes it possible to overload functions based on type properties.</td>
+      </tr>
+      <tr>
+        <td><link linkend="boost.exception">Boost.Exception</link></td>
+        <td/>
+        <td>Boost.Exception allows you to add additional data to thrown exceptions so you can provide more data to <code>catch</code> handlers.</td>
+      </tr>
+      <tr>
+        <td><link linkend="boost.filesystem">Boost.Filesystem</link></td>
+        <td></td>
+        <td>Boost.Filesystem provides a class to process paths and several functions to access files and directories.</td>
+      </tr>
+      <tr>
+        <td><link linkend="boost.flyweight">Boost.Flyweight</link></td>
+        <td></td>
+        <td>Boost.Flyweight makes it easy to use the design pattern of the same name.</td>
+      </tr>
+      <tr>
+        <td><link linkend="boost.foreach">Boost.Foreach</link></td>
+        <td/>
+        <td>Boost.Foreach provides a macro that is similar to the range-based <code>for</code> loop introduced with C++11.</td>
+      </tr>
+      <tr>
+        <td><link linkend="boost.format">Boost.Format</link></td>
+        <td/>
+        <td>Boost.Format replaces the function <function>std::printf</function> with a type-safe and extensible class, <classname>boost::format</classname>.</td>
+      </tr>
+      <tr>
+        <td><link linkend="boost.function">Boost.Function</link></td>
+        <td><acronym>TR1</acronym>, C++11</td>
+        <td>Boost.Function simplifies the definition of function pointers.</td>
+      </tr>
+      <tr>
+        <td><link linkend="boost.fusion">Boost.Fusion</link></td>
+        <td></td>
+        <td>Boost.Fusion allows you to create heterogeneous containers &#x2013; containers that can store elements of different types.</td>
+      </tr>
+      <tr>
+        <td><link linkend="boost.graph">Boost.Graph</link></td>
+        <td></td>
+        <td>Boost.Graph provides algorithms for operations such as finding the shortest path between two points in a graph.</td>
+      </tr>
+      <tr>
+        <td><link linkend="boost.heap">Boost.Heap</link></td>
+        <td></td>
+        <td>Boost.Heap provides many variants of the class <classname>std::priority_queue</classname> from the standard library.</td>
+      </tr>
+      <tr>
+        <td><link linkend="boost.integer">Boost.Integer</link></td>
+        <td>C++11</td>
+        <td>Boost.Integer defines specialized types for integers that have been available to C developers since the standard C99 was released in 1999.</td>
+      </tr>
+      <tr>
+        <td><link linkend="boost.interprocess">Boost.Interprocess</link></td>
+        <td/>
+        <td>Boost.Interprocess uses shared memory to help applications communicate quickly and efficiently.</td>
+      </tr>
+      <tr>
+        <td><link linkend="boost.intrusive">Boost.Intrusive</link></td>
+        <td/>
+        <td>Boost.Intrusive defines containers that provide higher performance than containers from the standard library, but which also have special requirements for the objects they contain.</td>
+      </tr>
+      <tr>
+        <td><link linkend="boost.iostreams">Boost.IOStreams</link></td>
+        <td></td>
+        <td>Boost.IOStreams provides streams and filters. Filters can be connected with a stream to, for example, write compressed data.</td>
+      </tr>
+      <tr>
+        <td><link linkend="boost.lambda">Boost.Lambda</link></td>
+        <td/>
+        <td>Boost.Lambda allows you to define anonymous functions without C++11.</td>
+      </tr>
+      <tr>
+        <td><link linkend="boost.lexical_cast">Boost.LexicalCast</link></td>
+        <td></td>
+        <td>Boost.LexicalCast provides a cast operator to convert numbers to a string and vice versa.</td>
+      </tr>
+      <tr>
+        <td><link linkend="boost.lockfree">Boost.Lockfree</link></td>
+        <td></td>
+        <td>Boost.Lockfree defines thread-safe containers that multiple threads may access concurrently.</td>
+      </tr>
+      <tr>
+        <td><link linkend="boost.log">Boost.Log</link></td>
+        <td></td>
+        <td>Boost.Log is the logging library in Boost.</td>
+      </tr>
+      <tr>
+        <td><link linkend="boost.msm">Boost.MetaStateMachine</link></td>
+        <td></td>
+        <td>Boost.MetaStateMachine makes it possible to develop state machines as they are defined in the <acronym>UML</acronym>.</td>
+      </tr>
+      <tr>
+        <td><link linkend="boost.minmax">Boost.MinMax</link></td>
+        <td>C++11</td>
+        <td>Boost.MinMax provides an algorithm that can find the smallest and largest values in a container without calling <function>std::min</function> and <function>std::max</function>.</td>
+      </tr>
+      <tr>
+        <td><link linkend="boost.mpi">Boost.MPI</link></td>
+        <td></td>
+        <td>Boost.MPI provides a C++ interface for the <acronym>MPI</acronym> standard.</td>
+      </tr>
+      <tr>
+        <td><link linkend="boost.multiarray">Boost.MultiArray</link></td>
+        <td/>
+        <td>Boost.MultiArray simplifies working with multidimensional arrays.</td>
+      </tr>
+      <tr>
+        <td><link linkend="boost.multiindex">Boost.MultiIndex</link></td>
+        <td/>
+        <td>Boost.MultiIndex allows you to define new containers that can support multiple interfaces, such as the ones from <classname>std::vector</classname> and <classname>std::map</classname>.</td>
+      </tr>
+      <tr>
+        <td><link linkend="boost.numeric_conversion">Boost.NumericConversion</link></td>
+        <td/>
+        <td>Boost.NumericConversion provides a cast operator to safely convert between values of different numeric types without generating an overflow condition.</td>
+      </tr>
+      <tr>
+        <td><link linkend="boost.operators">Boost.Operators</link></td>
+        <td/>
+        <td>Boost.Operators allows many operators to be automatically overloaded with the help of already defined operators.</td>
+      </tr>
+      <tr>
+        <td><link linkend="boost.optional">Boost.Optional</link></td>
+        <td></td>
+        <td>Boost.Optional provides a class to denote optional return values. Functions that can’t always return a result don’t need to use special values like -1 or a null pointer anymore.</td>
+      </tr>
+      <tr>
+        <td><link linkend="boost.parameter">Boost.Parameter</link></td>
+        <td></td>
+        <td>Boost.Parameter lets you pass parameters to functions as name/value pairs like you can with programming languages like Python.</td>
+      </tr>
+      <tr>
+        <td><link linkend="boost.phoenix">Boost.Phoenix</link></td>
+        <td></td>
+        <td>Boost.Phoenix makes it possible to create lambda functions without C++11. Unlike the C++11 lambda functions, the lambda functions from this library can be generic.</td>
+      </tr>
+      <tr>
+        <td><link linkend="boost.pointer_container">Boost.PointerContainer</link></td>
+        <td/>
+        <td>Boost.PointerContainer provides containers that are optimized for managing dynamically allocated objects.</td>
+      </tr>
+      <tr>
+        <td><link linkend="boost.pool">Boost.Pool</link></td>
+        <td></td>
+        <td>Boost.Pool is a library to manage memory. For example, Boost.Pool defines an allocator optimized for situations where you need to create and destroy many objects, all of the same size.</td>
+      </tr>
+      <tr>
+        <td><link linkend="boost.program_options">Boost.ProgramOptions</link></td>
+        <td></td>
+        <td>Boost.ProgramOptions allows an application to define and evaluate command-line options.</td>
+      </tr>
+      <tr>
+        <td><link linkend="boost.propertytree">Boost.PropertyTree</link></td>
+        <td></td>
+        <td>Boost.PropertyTree provides a container that stores key/value pairs in a tree-like structure. This makes it easier to manage the kind of configuration data used by many applications.</td>
+      </tr>
+      <tr>
+        <td><link linkend="boost.random">Boost.Random</link></td>
+        <td><acronym>TR1</acronym>, C++11</td>
+        <td>Boost.Random provides random number generators.</td>
+      </tr>
+      <tr>
+        <td><link linkend="boost.range">Boost.Range</link></td>
+        <td></td>
+        <td>Boost.Range introduces a concept called range that replaces the iterators usually received from containers with <methodname>begin</methodname> and <methodname>end</methodname>. Ranges makes it so you don’t have to pass a pair of iterators to algorithms.</td>
+      </tr>
+      <tr>
+        <td><link linkend="boost.ref">Boost.Ref</link></td>
+        <td><acronym>TR1</acronym>, C++11</td>
+        <td>Boost.Ref provides adapters that allow you to pass references to objects that can’t be copied to functions that pass parameters by copy.</td>
+      </tr>
+      <tr>
+        <td><link linkend="boost.regex">Boost.Regex</link></td>
+        <td><acronym>TR1</acronym>, C++11</td>
+        <td>Boost.Regex provides functions to search strings with regular expressions.</td>
+      </tr>
+      <tr>
+        <td><link linkend="boost.scopeexit">Boost.ScopeExit</link></td>
+        <td></td>
+        <td>Boost.ScopeExit provides macros to define code blocks that are executed when the current scope ends. That way, resources can be released at the end of the current scope without having to use smart pointers or other classes.</td>
+      </tr>
+      <tr>
+        <td><link linkend="boost.serialization">Boost.Serialization</link></td>
+        <td/>
+        <td>Boost.Serialization allows you to serialize objects and store them in files to be reloaded later.</td>
+      </tr>
+      <tr>
+        <td><link linkend="boost.signals2">Boost.Signals2</link></td>
+        <td/>
+        <td>Boost.Signals2 is a framework for event handling based on the signal/slot concept, which associates functions with signals and automatically calls the appropriate function(s) when a signal is triggered.</td>
+      </tr>
+      <tr>
+        <td><link linkend="boost.smartpointers">Boost.SmartPointers</link></td>
+        <td><acronym>TR1</acronym>, C++11 (partly)</td>
+        <td>Boost.SmartPointers provides a set of smart pointers that simplify managing dynamically allocated objects.</td>
+      </tr>
+      <tr>
+        <td><link linkend="boost.spirit">Boost.Spirit</link></td>
+        <td/>
+        <td>Boost.Spirit allows you to generate parsers using a syntax similar to <acronym>EBNF</acronym> (Extended Backus-Naur-Form).</td>
+      </tr>
+      <tr>
+        <td><link linkend="boost.stringalgorithms">Boost.StringAlgorithms</link></td>
+        <td/>
+        <td>Boost.StringAlgorithms provides many stand-alone functions to facilitate string handling.</td>
+      </tr>
+      <tr>
+        <td><link linkend="boost.swap">Boost.Swap</link></td>
+        <td/>
+        <td>Boost.Swap defines <function>boost::swap</function>, which has the same function as <function>std::swap</function>, but is optimized for many Boost libraries.</td>
+      </tr>
+      <tr>
+        <td><link linkend="boost.system">Boost.System</link></td>
+        <td>C++11</td>
+        <td>Boost.System offers a framework to process system- and application-specific error codes.</td>
+      </tr>
+      <tr>
+        <td><link linkend="boost.thread">Boost.Thread</link></td>
+        <td>C++11</td>
+        <td>Boost.Thread allows you to develop multithreaded applications.</td>
+      </tr>
+      <tr>
+        <td><link linkend="boost.timer">Boost.Timer</link></td>
+        <td></td>
+        <td>Boost.Timer defines clocks that let you measure code performance.</td>
+      </tr>
+      <tr>
+        <td><link linkend="boost.tokenizer">Boost.Tokenizer</link></td>
+        <td/>
+        <td>Boost.Tokenizer allows you to iterate over tokens in a string.</td>
+      </tr>
+      <tr>
+        <td><link linkend="boost.tribool">Boost.Tribool</link></td>
+        <td></td>
+        <td>Boost.Tribool provides a type that, unlike <type>bool</type>, distinguishes three, rather than two, states.</td>
+      </tr>
+      <tr>
+        <td><link linkend="boost.tuple">Boost.Tuple</link></td>
+        <td><acronym>TR1</acronym>, C++11</td>
+        <td>Boost.Tuple provides a generalized version of <classname>std::pair</classname> that can store an arbitrary number of values, not just two.</td>
+      </tr>
+      <tr>
+        <td><link linkend="boost.typetraits">Boost.TypeTraits</link></td>
+        <td><acronym>TR1</acronym>, C++11</td>
+        <td>Boost.TypeTraits provides functions to check properties of types.</td>
+      </tr>
+      <tr>
+        <td><link linkend="boost.unordered">Boost.Unordered</link></td>
+        <td><acronym>TR1</acronym>, C++11</td>
+        <td>Boost.Unordered provides two hash containers: <classname>boost::unordered_set</classname> and <classname>boost::unordered_map</classname>.</td>
+      </tr>
+      <tr>
+        <td><link linkend="boost.utility">Boost.Utility</link></td>
+        <td></td>
+        <td>Boost.Utility is a collection of various tools that are too small to have their own libraries and don’t fit in another library.</td>
+      </tr>
+      <tr>
+        <td><link linkend="boost.uuid">Boost.Uuid</link></td>
+        <td></td>
+        <td>Boost.Uuid defines the class <classname>boost::uuids::uuid</classname> and generators to create <acronym>UUID</acronym>s.</td>
+      </tr>
+      <tr>
+        <td><link linkend="boost.variant">Boost.Variant</link></td>
+        <td/>
+        <td>Boost.Variant permits the definition of types that, like <code>union</code>, group multiple types.</td>
+      </tr>
+      <tr>
+        <td><link linkend="boost.xpressive">Boost.Xpressive</link></td>
+        <td></td>
+        <td>Boost.Xpressive makes it possible to search strings with regular expressions. Regular expressions are encoded as C++ code rather than as strings.</td>
+      </tr>
+    </table>
+    <para>Presumably, the next version of the standard will be C++14. There are many project groups working on various topics for C++14. These activities are known as Technical Specifications (<acronym>TS</acronym>). For example, the File System <acronym>TS</acronym> works on an extension of the standard based on Boost.Filesystem to access files and directories. You can find more information on C++14 and the standardization of C++ at <link xlink:href="https://isocpp.org">isocpp.org</link>.</para>
+  </sect1>
+</preface>

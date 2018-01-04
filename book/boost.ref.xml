@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="5.0" xml:lang="en" xml:id="boost.ref">
+  <title>Boost.Ref</title><indexterm><primary>Boost.Ref</primary></indexterm>
+  <para>The library <link xlink:href="http://www.boost.org/doc/html/ref.html">Boost.Ref</link> provides two functions, <function>boost::ref</function><indexterm><primary>ref, Boost.Ref</primary></indexterm> and <function>boost::cref</function><indexterm><primary>cref, Boost.Ref</primary></indexterm>, in the header file <filename class="headerfile">boost/ref.hpp</filename>. They are useful if you use, for example, <function>std::bind</function> for a function which expects parameters by reference. Because <function>std::bind</function> takes parameters by value, you have to deal with references explicitly.</para>
+  <para>Boost.Ref was added to the standard library in C++11, where you will find the functions <function>std::ref</function> and <function>std::cref</function> in the header file <filename class="headerfile">functional</filename>.</para>
+  <example xml:id="ex.ref_01">
+    <title>Using <function>boost::ref</function></title>
+    <programlisting><xi:include href="../src/ref_01/main.cpp" parse="text"/></programlisting>
+  </example>
+  <para>In <xref linkend="ex.ref_01" xrefstyle="enp" />, the function <function>print</function> is passed to <function>std::for_each</function> to write the numbers in <varname>v</varname> to an output stream. Because <function>print</function> expects two parameters &#x2013; an output stream and the number to be written &#x2013; <function>std::bind</function> is used. The first parameter passed to <function>print</function> through <function>std::bind</function> is <varname>std::cout</varname>. However, <function>print</function> expects a reference to an output stream, while <function>std::bind</function> passes parameters by value. Therefore, <function>boost::ref</function> is used to wrap <varname>std::cout</varname>. <function>boost::ref</function> returns a proxy object that contains a reference to the object passed to it. This makes it possible to pass a reference to <varname>std::cout</varname> even though <function>std::bind</function> takes all parameters by value.</para>
+  <para>The function template <function>boost::cref</function> lets you pass a <constant>const</constant> reference.</para>
+</chapter>

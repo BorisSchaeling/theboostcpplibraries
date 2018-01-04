@@ -1,0 +1,2 @@
+exe test : main.cpp ..//boost_headers ..//boost_log ..//boost_thread ..//boost_system ..//boost_filesystem : <toolset>clang-3.3:<build>no ;
+stage . : test ;

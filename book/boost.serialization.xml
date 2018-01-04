@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="5.0" xml:lang="en" xml:id="boost.serialization">
+  <title>Boost.Serialization</title><indexterm><primary>Boost.Serialization</primary></indexterm>
+  <para>The library <link xlink:href="http://www.boost.org/libs/serialization">Boost.Serialization</link> makes it possible to convert objects in a C++ program to a sequence of bytes that can be saved and loaded to restore the objects. There are different data formats available to define the rules for generating sequences of bytes. All of the formats supported by Boost.Serialization are only intended for use with this library. For example, the <acronym>XML</acronym> format developed for Boost.Serialization should not be used to exchange data with programs that do not use Boost.Serialization. The only advantage of the <acronym>XML</acronym> format is that it can make debugging easier since C++ objects are saved in a readable format.</para>
+  <note>
+    <para>As outlined in the <link xlink:href="http://www.boost.org/users/history/version_1_55_0.html">release notes</link> of version 1.55.0 of the Boost libraries, a missing include causes a compiler error with Visual C++ 2013. This bug has been fixed in Boost 1.56.0.</para>
+  </note>
+  <sect1 xml:id="boost.serialization-archive">
+    <title>Archive</title>
+    <para>The main concept of Boost.Serialization is the <emphasis role="concept">archive</emphasis><indexterm><primary>archive, Boost.Serialization</primary></indexterm>. An archive is a sequence of bytes that represent serialized C++ objects. Objects can be added to an archive to serialize them and then later loaded from the archive. In order to restore previously saved C++ objects, the same types are presumed.</para>
+    <example xml:id="ex.serialization_01">
+      <title>Using <classname>boost::archive::text_oarchive</classname></title>
+      <programlisting><xi:include href="../src/serialization_01/main.cpp" parse="text"/></programlisting>
+    </example>
+    <para>Boost.Serialization provides archive classes such as <classname>boost::archive::text_oarchive</classname><indexterm><primary>archive::text_oarchive</primary></indexterm><indexterm><primary>text_oarchive, archive</primary></indexterm>, which is defined in <filename class="headerfile">boost/archive/text_oarchive.hpp</filename>. This class makes it possible to serialize objects as a text stream. With Boost 1.56.0, <xref linkend="ex.serialization_01" xrefstyle="enp" /> writes <computeroutput>22 serialization::archive 11 1</computeroutput> to the standard output stream.</para>
+    <para>As can be seen, the object <varname>oa</varname> of type <classname>boost::archive::text_oarchive</classname> can be used like a stream to serialize a variable using <methodname role="operator">operator&lt;&lt;</methodname><indexterm><primary>operator&lt;&lt;, Boost.Serialization</primary></indexterm>. However, archives should not be considered as regular streams that store arbitrary data. To restore data, you must access it as you stored it, using the same data types in the same order. <xref linkend="ex.serialization_02" xrefstyle="enp" /> serializes and restores a variable of type <type>int</type>.</para>
+    <example xml:id="ex.serialization_02">
+      <title>Using <classname>boost::archive::text_iarchive</classname></title>
+      <programlisting><xi:include href="../src/serialization_02/main.cpp" parse="text"/></programlisting>
+    </example>
+    <para>The class <classname>boost::archive::text_oarchive</classname> serializes data as a text stream, and the class <classname>boost::archive::text_iarchive</classname><indexterm><primary>archive::text_iarchive</primary></indexterm><indexterm><primary>text_iarchive, archive</primary></indexterm> restores data from such a text stream. To use these classes, include the header files <filename class="headerfile">boost/archive/text_iarchive.hpp</filename> and <filename class="headerfile">boost/archive/text_oarchive.hpp</filename>.</para>
+    <para>Constructors of archives expect an input or output stream as a parameter. The stream is used to serialize or restore data. While <xref linkend="ex.serialization_02" xrefstyle="enp" /> accesses a file, other streams, such as a stringstream, can also be used.</para>
+    <example xml:id="ex.serialization_03">
+      <title>Serializing with a stringstream</title>
+      <programlisting><xi:include href="../src/serialization_03/main.cpp" parse="text"/></programlisting>
+    </example>
+    <para><xref linkend="ex.serialization_03" xrefstyle="enp"/> writes <computeroutput>1</computeroutput> to standard output using a stringstream to serialize data.</para>
+    <para>So far, only primitive types have been serialized. <xref linkend="ex.serialization_04" xrefstyle="enp"/> shows how to serialize objects of user-defined types.</para>
+    <example xml:id="ex.serialization_04">
+      <title>Serializing user-defined types with a member function</title>
+      <programlisting><xi:include href="../src/serialization_04/main.cpp" parse="text"/></programlisting>
+    </example>
+    <para>In order to serialize objects of user-defined types, you must define the member function <methodname>serialize</methodname><indexterm><primary>serialize, Boost.Serialization</primary></indexterm>. This function is called when the object is serialized to or restored from a byte stream. Because <methodname>serialize</methodname> is used for both serializing and restoring, Boost.Serialization supports the operator <methodname role="operator">operator&amp;</methodname><indexterm><primary>operator&amp;, Boost.Serialization</primary></indexterm> in addition to <methodname role="operator">operator&lt;&lt;</methodname> and <methodname role="operator">operator&gt;&gt;</methodname><indexterm><primary>operator&gt;&gt;, Boost.Serialization</primary></indexterm>. With <methodname role="operator">operator&amp;</methodname> there is no need to distinguish between serializing and restoring within <methodname>serialize</methodname>.</para>
+    <para><methodname>serialize</methodname> is automatically called any time an object is serialized or restored. It should never be called explicitly and, thus, should be declared as private. If it is declared as private, the class <classname>boost::serialization::access</classname><indexterm><primary>serialization::access</primary></indexterm><indexterm><primary>access, serialization</primary></indexterm> must be declared as a friend to allow Boost.Serialization to access the member function.</para>
+    <para>There may be situations that do not you allow to modify an existing class in order to add <methodname>serialize</methodname>. For example, this is true for classes from the standard library.</para>
+    <example xml:id="ex.serialization_05">
+      <title>Serializing with a free-standing function</title>
+      <programlisting><xi:include href="../src/serialization_05/main.cpp" parse="text"/></programlisting>
+    </example>
+    <para>In order to serialize types that cannot be modified, the free-standing function <function>serialize</function> can be defined as shown in <xref linkend="ex.serialization_05" xrefstyle="enp" />. This function expects a reference to an object of the corresponding type as its second parameter.</para>
+    <para>Implementing <function>serialize</function> as a free-standing function requires that essential member variables of a class can be accessed from outside. In <xref linkend="ex.serialization_05" xrefstyle="enp"/>, <function>serialize</function> can only be implemented as a free-standing function since <varname>legs_</varname> is no longer a private member variable of the class <classname>animal</classname>.</para>
+    <para>Boost.Serialization provides <function>serialize</function> functions for many classes from the standard library. To serialize objects based on standard classes, additional header files need to be included.</para>
+    <example xml:id="ex.serialization_06">
+      <?dbfo keep-together="auto"?>
+      <title>Serializing strings</title>
+      <programlisting><xi:include href="../src/serialization_06/main.cpp" parse="text"/></programlisting>
+    </example>
+    <para><xref linkend="ex.serialization_06" xrefstyle="enp" /> extends the class <classname>animal</classname> by adding <varname>name_</varname>, a member variable of type <classname>std::string</classname>. In order to serialize this member variable, the header file <filename class="headerfile">boost/serialization/string.hpp</filename> must be included to provide the appropriate free-standing function <function>serialize</function>.</para>
+    <para>As mentioned before, Boost.Serialization defines <function>serialize</function> functions for many classes from the standard library. These functions are defined in header files that carry the same name as the corresponding header files from the standard. So, to serialize objects of type <classname>std::string</classname>, include the header file <filename class="headerfile">boost/serialization/string.hpp</filename> and to serialize objects of type <classname>std::vector</classname>, include the header file <filename class="headerfile">boost/serialization/vector.hpp</filename>. It is fairly obvious which header file to include.</para>
+    <para>One parameter of <function>serialize</function> that has been ignored so far is <varname>version</varname>. This parameter helps make archives backward compatible. <xref linkend="ex.serialization_07" xrefstyle="enp" /> can load an archive that was created by <xref linkend="ex.serialization_05" xrefstyle="ewp"/>. The version of the class <classname>animal</classname> in <xref linkend="ex.serialization_05" xrefstyle="enp"/> did not contain a name. <xref linkend="ex.serialization_07" xrefstyle="enp" /> checks the version number when loading an archive and only accesses the name if the version is greater than 0. This allows it to handle an older archive that was created without name.</para>
+    <example xml:id="ex.serialization_07">
+      <title>Backward compatibility with version numbers</title>
+      <programlisting><xi:include href="../src/serialization_07/main.cpp" parse="text"/></programlisting>
+    </example>
+    <para>The macro <code>BOOST_CLASS_VERSION</code><indexterm><primary>BOOST_CLASS_VERSION, Boost.Serialization</primary></indexterm> assigns a version number to a class. The version number for the class <classname>animal</classname> in <xref linkend="ex.serialization_07" xrefstyle="enp"/> is 1. If <code>BOOST_CLASS_VERSION</code> is not used, the version number is 0 by default.</para>
+    <para>The version number is stored in the archive and is part of it. While the version number specified for a particular class via the <code>BOOST_CLASS_VERSION</code> macro is used during serialization, the parameter <varname>version</varname> of <function>serialize</function> is set to the value stored in the archive when restoring. If the new version of <classname>animal</classname> accesses an archive containing an object serialized with the old version, the member variable <varname>name_</varname> would not be restored because the old version did not have such a member variable.</para>
+    <simplesect role="exercises" xml:id="boost.serialization-archive-exercises">
+      <title>Exercise</title>
+      <para>Create a program which serializes an object of type <classname>std::runtime_error</classname> to a file and loads it again.</para>
+    </simplesect>
+  </sect1>
+  <sect1 xml:id="boost.serialization-pointers-and-references">
+    <title>Pointers and References</title>
+    <para>Boost.Serialization can also serialize pointers and references. Because a pointer stores the address of an object, serializing the address does not make much sense. When serializing pointers and references, the referenced object is serialized.</para>
+    <example xml:id="ex.serialization_08">
+      <title>Serializing pointers</title>
+      <programlisting><xi:include href="../src/serialization_08/main.cpp" parse="text"/></programlisting>
+    </example>
+    <para><xref linkend="ex.serialization_08" xrefstyle="enp"/> creates a new object of type <classname>animal</classname> with <code>new</code> and assigns it to the pointer <varname>a</varname>. The pointer &#x2013; not <code>*a</code> &#x2013; is then serialized. Boost.Serialization automatically serializes the object referenced by <varname>a</varname> and not the address of the object.</para>
+    <para>If the archive is restored, <varname>a</varname> will not necessarily contain the same address. A new object is created and its address is assigned to <varname>a</varname> instead. Boost.Serialization only guarantees that the object is the same as the one serialized, not that its address is the same.</para>
+    <para>Because smart pointers are used in connection with dynamically allocated memory, Boost.Serialization provides also support for them.</para>
+    <example xml:id="ex.serialization_09">
+      <title>Serializing smart pointers</title>
+      <programlisting><xi:include href="../src/serialization_09/main.cpp" parse="text"/></programlisting>
+    </example>
+    <para><xref linkend="ex.serialization_09" xrefstyle="enp" /> uses the smart pointer <classname>boost::scoped_ptr</classname> to manage a dynamically allocated object of type <classname>animal</classname>. Include the header file <filename class="headerfile">boost/serialization/scoped_ptr.hpp</filename> to serialize such a pointer. To serialize a smart pointer of type <classname>boost::shared_ptr</classname>, use the header file <filename class="headerfile">boost/serialization/shared_ptr.hpp</filename>.</para>
+    <para>Please note that Boost.Serialization hasn’t been updated for C++11, yet. Smart pointers from the C++11 standard library like <classname>std::shared_ptr</classname> and <classname>std::unique_ptr</classname> are not currently supported by Boost.Serialization.</para>
+    <example xml:id="ex.serialization_10">
+      <title>Serializing references</title>
+      <?dbfo keep-together="auto"?>
+      <programlisting><xi:include href="../src/serialization_10/main.cpp" parse="text"/></programlisting>
+    </example>
+    <para>Boost.Serialization can also serialize references without any issues (see <xref linkend="ex.serialization_10" xrefstyle="enp"/>). Just as with pointers, the referenced object is serialized automatically.</para>
+  </sect1>
+  <sect1 xml:id="boost.serialization-class-hierarchies">
+    <title>Serialization of Class Hierarchy Objects</title>
+    <para>Derived classes must access the function <function>boost::serialization::base_object</function><indexterm><primary>serialization::base_object</primary></indexterm><indexterm><primary>base_object, serialization</primary></indexterm> inside the member function <methodname>serialize</methodname> to serialize objects based on class hierarchies. This function guarantees that inherited member variables of base classes are correctly serialized.</para>
+    <example xml:id="ex.serialization_11">
+      <title>Serializing derived classes correctly</title>
+      <?dbfo keep-together="auto"?>
+      <programlisting><xi:include href="../src/serialization_11/main.cpp" parse="text"/></programlisting>
+    </example>
+    <para><xref linkend="ex.serialization_11" xrefstyle="enp"/> uses a class called <classname>bird</classname>, which is derived from <classname>animal</classname>. Both <classname>animal</classname> and <classname>bird</classname> define a private member function <methodname>serialize</methodname> that makes it possible to serialize objects based on either class. Because <classname>bird</classname> is derived from <classname>animal</classname>, <methodname>serialize</methodname> must ensure that member variables inherited from <classname>animal</classname> are serialized, too.</para>
+    <para>Inherited member variables are serialized by accessing the base class inside the member function <methodname>serialize</methodname> of the derived class and calling <function>boost::serialization::base_object</function>. You must use this function rather than, for example, <code>static_cast</code> because only <function>boost::serialization::base_object</function> ensures correct serialization.</para>
+    <para>Addresses of dynamically created objects can be assigned to pointers of the corresponding base class type. <xref linkend="ex.serialization_12" xrefstyle="enp"/> shows that Boost.Serialization can serialize them correctly as well.</para>
+    <example xml:id="ex.serialization_12">
+      <title>Registering derived classes statically with <code>BOOST_CLASS_EXPORT</code></title>
+      <programlisting><xi:include href="../src/serialization_12/main.cpp" parse="text"/></programlisting>
+    </example>
+    <para>The program creates an object of type <classname>bird</classname> inside the function <function>save</function> and assigns it to a pointer of type <type>animal*</type>, which in turn is serialized via <methodname role="operator">operator&lt;&lt;</methodname>.</para>
+    <para>As mentioned in the previous section, the referenced object is serialized, not the pointer. To have Boost.Serialization recognize that an object of type <classname>bird</classname> must be serialized, even though the pointer is of type <type>animal*</type>, the class <classname>bird</classname> needs to be declared. This is done using the macro <code>BOOST_CLASS_EXPORT</code><indexterm><primary>BOOST_CLASS_EXPORT, Boost.Serialization</primary></indexterm>, which is defined in <filename class="headerfile">boost/serialization/export.hpp</filename>. Because the type <classname>bird</classname> does not appear in the pointer definition, Boost.Serialization cannot serialize an object of type <classname>bird</classname> correctly without the macro.</para>
+    <para>The macro <code>BOOST_CLASS_EXPORT</code> must be used if objects of derived classes are to be serialized using a pointer to their corresponding base class. A disadvantage of <code>BOOST_CLASS_EXPORT</code> is that, because of static registration, classes can be registered that may not be used for serialization at all. Boost.Serialization offers a solution for this scenario.</para>
+    <example xml:id="ex.serialization_13">
+      <title>Registering derived classes dynamically with <methodname>register_type</methodname></title>
+      <programlisting><xi:include href="../src/serialization_13/main.cpp" parse="text"/></programlisting>
+    </example>
+    <para>Instead of using the macro <code>BOOST_CLASS_EXPORT</code>, <xref linkend="ex.serialization_13" xrefstyle="enp"/> calls the member function template <methodname>register_type</methodname><indexterm><primary>archive::text_oarchive::register_type</primary></indexterm><indexterm><primary>archive::text_iarchive::register_type</primary></indexterm><indexterm><primary>register_type, archive::text_oarchive</primary></indexterm><indexterm><primary>register_type, archive::text_iarchive</primary></indexterm>. The type to be registered is passed as a template parameter. Note that <methodname>register_type</methodname> must be called both in <function>save</function> and <function>load</function>.</para>
+    <para>The advantage of <methodname>register_type</methodname> is that only classes used for serialization must be registered. For example, when developing a library, one does not know which classes a developer may use for serialization later. While the macro <code>BOOST_CLASS_EXPORT</code> makes this easy, it may register types that are not going to be used for serialization.</para>
+  </sect1>
+  <sect1 xml:id="boost.serialization-wrappers">
+    <title>Wrapper Functions for Optimization</title>
+    <para>This section introduces wrapper functions to optimize the serialization process. These functions mark objects to allow Boost.Serialization to apply certain optimization techniques.</para>
+    <example xml:id="ex.serialization_14">
+      <title>Serializing an array without a wrapper function</title>
+      <?dbfo keep-together="auto"?>
+      <programlisting><xi:include href="../src/serialization_14/main.cpp" parse="text"/></programlisting>
+    </example>
+    <para><xref linkend="ex.serialization_14" xrefstyle="enp" /> uses Boost.Serialization without any wrapper function. The example creates and writes the value <computeroutput>22 serialization::archive 11 0 0 3 0 1 2</computeroutput> to the string. Using the wrapper function <function>boost::serialization::make_array</function><indexterm><primary>serialization::make_array</primary></indexterm><indexterm><primary>make_array, serialization</primary></indexterm>, the value written can be shortened to the following string: <computeroutput>22 serialization::archive 11 0 1 2</computeroutput>.</para>
+    <example xml:id="ex.serialization_15">
+      <title>Serializing an array with the wrapper function <function>make_array</function></title>
+      <?dbfo keep-together="auto"?>
+      <programlisting><xi:include href="../src/serialization_15/main.cpp" parse="text"/></programlisting>
+    </example>
+    <para><function>boost::serialization::make_array</function> expects the address and the length of an array. However, because it is known in advance, the length does not need to be serialized as part of the array.</para>
+    <para><function>boost::serialization::make_array</function> can be used whenever classes such as <classname>std::array</classname> or <classname>std::vector</classname> contain an array that can be serialized directly. Additional member variables, which would normally also be serialized, are skipped (see <xref linkend="ex.serialization_15" xrefstyle="enp"/>).</para>
+    <para>Boost.Serialization also provides the wrapper <function>boost::serialization::make_binary_object</function><indexterm><primary>serialization::make_binary_object</primary></indexterm><indexterm><primary>make_binary_object, serialization</primary></indexterm>. Similar to <function>boost::serialization::make_array</function>, this function expects an address and a length. <function>boost::serialization::make_binary_object</function> is used solely for binary data that has no underlying structure, while <function>boost::serialization::make_array</function> is used for arrays.</para>
+  </sect1>
+</chapter>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="5.0" xml:lang="en" xml:id="boost.bimap">
+  <title>Boost.Bimap</title><indexterm><primary>Boost.Bimap</primary></indexterm>
+  <para>The library <link xlink:href="http://www.boost.org/libs/bimap">Boost.Bimap</link> is based on Boost.MultiIndex and provides a container that can be used immediately without being defined first. The container is similar to <classname>std::map</classname>, but supports looking up values from either side. Boost.Bimap allows you to create maps where either side can be the key, depending on how you access the map. When you access the left side as the key, the right side is the value, and vice versa.</para>
+  <example xml:id="ex.bimap_01">
+    <title>Using <classname>boost::bimap</classname></title>
+    <programlisting><xi:include href="../src/bimap_01/main.cpp" parse="text"/></programlisting>
+  </example>
+  <para><classname>boost::bimap</classname><indexterm><primary>bimap, Boost.Bimap</primary></indexterm> is defined in <filename class="headerfile">boost/bimap.hpp</filename> and provides two member variables, <varname>left</varname> and <varname>right</varname>, which can be used to access the two containers of type <classname>std::map</classname> that are unified by <classname>boost::bimap</classname>. In <xref linkend="ex.bimap_01" xrefstyle="enp"/>, <varname>left</varname> uses keys of type <classname>std::string</classname> to access the container, and <varname>right</varname> uses keys of type <type>int</type>.</para>
+  <para>Besides supporting access to individual records using a left or right container, <classname>boost::bimap</classname> allows you to view records as relations (see <xref linkend="ex.bimap_02" xrefstyle="enp"/>).</para>
+  <example xml:id="ex.bimap_02">
+    <title>Accessing relations</title>
+    <programlisting><xi:include href="../src/bimap_02/main.cpp" parse="text"/></programlisting>
+  </example>
+  <para>It is not necessary to access records using <varname>left</varname> or <varname>right</varname>. By iterating over records, the left and right parts of an individual record are made available through the iterator.</para>
+  <para>While <classname>std::map</classname> is accompanied by a container called <classname>std::multimap</classname>, which can store multiple records using the same key, there is no such equivalent for <classname>boost::bimap</classname>. However, this does not mean that storing multiple records with the same key inside a container of type <classname>boost::bimap</classname> is impossible. Strictly speaking, the two required template parameters specify container types for <varname>left</varname> and <varname>right</varname>, not the types of the elements to store. If no container type is specified, the container type <classname>boost::bimaps::set_of</classname><indexterm><primary>bimaps::set_of</primary></indexterm><indexterm><primary>set_of, bimaps</primary></indexterm> is used by default. This container, like <classname>std::map</classname>, only accepts records with unique keys.</para>
+  <example xml:id="ex.bimap_03">
+    <title>Using <classname>boost::bimaps::set_of</classname> explicitly</title>
+    <programlisting><xi:include href="../src/bimap_03/main.cpp" parse="text"/></programlisting>
+  </example>
+  <para><xref linkend="ex.bimap_03" xrefstyle="enp"/> specifies <classname>boost::bimaps::set_of</classname>.</para>
+  <para>Other container types besides <classname>boost::bimaps::set_of</classname> can be used to customize <classname>boost::bimap</classname>.</para>
+  <example xml:id="ex.bimap_04">
+    <title>Allowing duplicates with <classname>boost::bimaps::multiset_of</classname></title>
+    <programlisting><xi:include href="../src/bimap_04/main.cpp" parse="text"/></programlisting>
+  </example>
+  <para><xref linkend="ex.bimap_04" xrefstyle="enp"/> uses the container type <classname>boost::bimaps::multiset_of</classname><indexterm><primary>bimaps::multiset_of</primary></indexterm><indexterm><primary>multiset_of, bimaps</primary></indexterm>, which is defined in <filename class="headerfile">boost/bimap/multiset_of.hpp</filename>. It works like <classname>boost::bimaps::set_of</classname>, except that keys don’t need to be unique. <xref linkend="ex.bimap_04" xrefstyle="enp"/> will successfully display <computeroutput>2</computeroutput> when searching for animals with four legs.</para>
+  <para>Because <classname>boost::bimaps::set_of</classname> is used by default for containers of type <classname>boost::bimap</classname>, the header file <filename class="headerfile">boost/bimap/set_of.hpp</filename> does not need to be included explicitly. However, when using other container types, the corresponding header files must be included.</para>
+  <para>In addition to the classes shown above, Boost.Bimap provides the following: <classname>boost::bimaps::unordered_set_of</classname><indexterm><primary>bimaps::unordered_set_of</primary></indexterm><indexterm><primary>unordered_set_of, bimaps</primary></indexterm>, <classname>boost::bimaps::unordered_multiset_of</classname><indexterm><primary>bimaps::unordered_multiset_of</primary></indexterm><indexterm><primary>unordered_multiset_of, bimaps</primary></indexterm>, <classname>boost::bimaps::list_of</classname><indexterm><primary>bimaps::list_of</primary></indexterm><indexterm><primary>list_of, bimaps</primary></indexterm>, <classname>boost::bimaps::vector_of</classname><indexterm><primary>bimaps::vector_of</primary></indexterm><indexterm><primary>vector_of, bimaps</primary></indexterm>, and <classname>boost::bimaps::unconstrained_set_of</classname><indexterm><primary>bimaps::unconstrained_set_of</primary></indexterm><indexterm><primary>unconstrained_set_of, bimaps</primary></indexterm>. Except for <classname>boost::bimaps::unconstrained_set_of</classname>, all of the other container types operate just like their counterparts from the standard library.</para>
+  <example xml:id="ex.bimap_05">
+    <title>Disabling one side with <classname>boost::bimaps::unconstrained_set_of</classname></title>
+    <programlisting><xi:include href="../src/bimap_05/main.cpp" parse="text"/></programlisting>
+  </example>
+  <para><classname>boost::bimaps::unconstrained_set_of</classname> can be used to disable one side of <classname>boost::bimap</classname>. In <xref linkend="ex.bimap_05" xrefstyle="enp"/>, <classname>boost::bimap</classname> behaves like <classname>std::map</classname>. You can’t access <varname>right</varname> to search for animals by legs.</para>
+  <para><xref linkend="ex.bimap_05" xrefstyle="enp"/> illustrates another reason why it can make sense to prefer <classname>boost::bimap</classname> over <classname>std::map</classname>. Since Boost.Bimap is based on Boost.MultiIndex, member functions from Boost.MultiIndex are available. <xref linkend="ex.bimap_05" xrefstyle="enp"/> modifies a key using <methodname>modify_key</methodname><indexterm><primary>bimaps::set_of::modify_key</primary></indexterm><indexterm><primary>modify_key, bimaps::set_of</primary></indexterm> &#x2013; something that is not possible with <classname>std::map</classname>.</para>
+  <para>Note how the key is modified. A new value is assigned to the current key using <varname>boost::bimaps::_key</varname><indexterm><primary>bimaps::_key</primary></indexterm><indexterm><primary>_key, bimaps</primary></indexterm>, which is a placeholder that is defined in <filename class="headerfile">boost/bimap/support/lambda.hpp</filename>.</para>
+  <para><filename class="headerfile">boost/bimap/support/lambda.hpp</filename> also defines <varname>boost::bimaps::_data</varname><indexterm><primary>bimaps::_data</primary></indexterm><indexterm><primary>_data, bimaps</primary></indexterm>. When calling the member function <methodname>modify_data</methodname><indexterm><primary>bimaps::set_of::modify_data</primary></indexterm><indexterm><primary>modify_data, bimaps::set_of</primary></indexterm>, <varname>boost::bimaps::_data</varname> can be used to modify a value in a container of type <classname>boost::bimap</classname>.</para>
+  <simplesect role="exercises" xml:id="boost.bimap-exercises">
+    <title>Exercise</title>
+    <para>Implement the class <classname>animals_container</classname> with Boost.Bimap:</para>
+    <informalexample>
+      <programlisting><xi:include href="../exercises/bimap_01/main.cpp" parse="text"/></programlisting>
+    </informalexample>
+  </simplesect>
+</chapter>

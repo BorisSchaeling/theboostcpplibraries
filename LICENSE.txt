@@ -1,0 +1,10 @@
+The Boost C++ Libraries (c) by Boris Schäling
+
+The Boost C++ Libraries is licensed under a
+Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License.
+
+You should have received a copy of the license along with this
+work. If not, see <http://creativecommons.org/licenses/by-nc-nd/4.0/>.
+
+Exceptions: Examples and exercises are licensed under the Boost Software License
+(see <http://www.boost.org/LICENSE_1_0.txt>).

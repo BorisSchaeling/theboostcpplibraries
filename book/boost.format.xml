@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="5.0" xml:lang="en" xml:id="boost.format">
+  <title>Boost.Format</title><indexterm><primary>Boost.Format</primary></indexterm>
+  <para><link xlink:href="http://www.boost.org/libs/format">Boost.Format</link> offers a replacement for the function <function>std::printf</function>. <function>std::printf</function> originates from the C standard and allows formatted data output. However, it is neither type safe nor extensible. Boost.Format provides a type-safe and extensible alternative.</para>
+  <para>Boost.Format provides a class called <classname>boost::format</classname>,<indexterm><primary>format, Boost.Format</primary></indexterm> which is defined in <filename class="headerfile">boost/format.hpp</filename>. Similar to <function>std::printf</function>, a string containing special characters to control formatting is passed to the constructor of <classname>boost::format</classname>. The data that replaces these special characters in the output is linked via the operator <methodname role="operator">operator%</methodname><indexterm><primary>format::operator%</primary></indexterm><indexterm><primary>operator%, format</primary></indexterm>.</para>
+  <example xml:id="ex.format_01">
+    <title>Formatted output with <classname>boost::format</classname></title>
+    <programlisting><xi:include href="../src/format_01/main.cpp" parse="text"/></programlisting>
+  </example>
+  <para>The Boost.Format format string uses numbers placed between two percent signs as placeholders for the actual data, which will be linked in using <methodname role="operator">operator%</methodname>. <xref linkend="ex.format_01" xrefstyle="enp"/> creates a date string in the form <computeroutput>12.5.2014</computeroutput> using the numbers 12, 5, and 2014 as the data. To make the month appear in front of the day, which is common in the United States, the placeholders can be swapped. <xref linkend="ex.format_02" xrefstyle="enp" /> makes this change, displaying <computeroutput>5/12/2014</computeroutput></para>
+  <example xml:id="ex.format_02">
+    <title>Numbered placeholders with <classname>boost::format</classname></title>
+    <programlisting><xi:include href="../src/format_02/main.cpp" parse="text"/></programlisting>
+  </example>
+  <para>To format data with manipulators, Boost.Format provides a function called <function>boost::io::group</function><indexterm><primary>io::group</primary></indexterm><indexterm><primary>group, io</primary></indexterm>.</para>
+  <example xml:id="ex.format_03">
+    <title>Using manipulators with <function>boost::io::group</function></title>
+    <programlisting><xi:include href="../src/format_03/main.cpp" parse="text"/></programlisting>
+  </example>
+  <para><xref linkend="ex.format_03" xrefstyle="enp" /> uses the manipulator <function>std::showpos</function> on the value that will be associated with <quote>%1%</quote>. Therefore, this example will display <computeroutput>+1 2 +1</computeroutput> as output. Because the manipulator <function>std::showpos</function> has been linked to the first data value using <function>boost::io::group</function>, the plus sign is automatically added whenever this value is displayed. In this case, the format placeholder <quote>%1%</quote> is used twice.</para>
+  <para>If the plus sign should only be shown for the first output of 1, the format placeholder needs to be customized.</para>
+  <example xml:id="ex.format_04">
+    <title>Placeholders with special characters</title>
+    <programlisting><xi:include href="../src/format_04/main.cpp" parse="text"/></programlisting>
+  </example>
+  <para xlink:href="http://www.boost.org/libs/format/doc/format.html#printf_directives"><xref linkend="ex.format_04" xrefstyle="enp" /> does this. In this example, the first instance of the placeholder <quote>%1%</quote> is replaced with <quote>%|1$+|</quote>. Customization of a format does not just add two additional pipe signs. The reference to the data is also placed between the pipe signs and uses <quote>1$</quote> instead of <quote>1%</quote>. This is required to modify the output to be <computeroutput>+1 2 1</computeroutput>. You can find details about the format specifications in the <link xlink:href="http://www.boost.org/libs/format/doc/format.html#printf_directives">Boost documentation</link>.</para>
+  <para>Placeholder references to data must be specified either for all placeholders or for none. <xref linkend="ex.format_05" xrefstyle="enp" /> only provides references for one of three placeholders, which generates an error at run time.</para>
+  <example xml:id="ex.format_05">
+    <title><exceptionname>boost::io::format_error</exceptionname> in case of an error</title>
+    <programlisting><xi:include href="../src/format_05/main.cpp" parse="text"/></programlisting>
+  </example>
+  <para><xref linkend="ex.format_05" xrefstyle="enp"/> throws an exception of type <exceptionname>boost::io::format_error</exceptionname><indexterm><primary>io::format_error</primary></indexterm><indexterm><primary>format_error, io</primary></indexterm>. Strictly speaking, Boost.Format throws <exceptionname>boost::io::bad_format_string</exceptionname><indexterm><primary>io::bad_format_string</primary></indexterm><indexterm><primary>bad_format_string, io</primary></indexterm>. However, because the different exception classes are all derived from <exceptionname>boost::io::format_error</exceptionname>, it is usually easier to catch exceptions of this type.</para>
+  <para><xref linkend="ex.format_06" xrefstyle="enp"/> shows how to write the program without using references in the format string.</para>
+  <example xml:id="ex.format_06">
+    <title>Placeholders without numbers</title>
+    <programlisting><xi:include href="../src/format_06/main.cpp" parse="text"/></programlisting>
+  </example>
+  <para>The pipe signs for the second and third placeholder can safely be omitted in this case because they do not specify any format. The resulting syntax then closely resembles <function>std::printf</function> (see <xref linkend="ex.format_07" xrefstyle="enp"/>).</para>
+  <example xml:id="ex.format_07">
+    <title><classname>boost::format</classname> with the syntax used from <function>std::printf</function></title>
+    <programlisting><xi:include href="../src/format_07/main.cpp" parse="text"/></programlisting>
+  </example>
+  <para>While the format may look like that used by <function>std::printf</function>, Boost.Format provides the advantage of type safety. The letter <quote role="reverse">d</quote> within the format string does not indicate the output of a number. Instead, it applies the manipulator <function>std::dec</function> to the internal stream object used by <classname>boost::format</classname>. This makes it possible to specify format strings that would make no sense for <function>std::printf</function> and would result in a crash.</para>
+  <example xml:id="ex.format_08">
+    <title><classname>boost::format</classname> with seemingly invalid placeholders</title>
+    <programlisting><xi:include href="../src/format_08/main.cpp" parse="text"/></programlisting>
+  </example>
+  <para><function>std::printf</function> allows the letter <quote role="reverse">s</quote> only for strings of type <type>const char*</type>. With <function>std::printf</function>, the combination of <quote>%s</quote> and a numeric value would fail. However, <xref linkend="ex.format_08" xrefstyle="enp" /> works perfectly. Boost.Format does not require a string. Instead, it applies the appropriate manipulators to configure the internal stream.</para>
+  <para>Boost.Format is both type safe and extensible. Objects of any type can be used with Boost.Format as long as the operator <methodname role="operator">operator&lt;&lt;</methodname> is overloaded for <classname>std::ostream</classname>.</para>
+  <example xml:id="ex.format_09">
+    <title><classname>boost::format</classname> with user-defined type</title>
+    <programlisting><xi:include href="../src/format_09/main.cpp" parse="text"/></programlisting>
+  </example>
+  <para><xref linkend="ex.format_09" xrefstyle="enp"/> uses <classname>boost::format</classname> to write an object of the user-defined type <classname>animal</classname> to standard output. This is possible because the stream operator is overloaded for <classname>animal</classname>.</para>
+</chapter>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="5.0" xml:lang="en" xml:id="boost.swap">
+  <title>Boost.Swap</title><indexterm><primary>Boost.Swap</primary></indexterm>
+  <para>If you use many Boost libraries and also use <function>std::swap</function> to swap data, consider using <function>boost::swap</function><indexterm><primary>swap, Boost.Swap</primary></indexterm> as an alternative. <function>boost::swap</function> is provided by <link xlink:href="http://www.boost.org/libs/core/swap.html">Boost.Swap</link> and is defined in <filename class="headerfile">boost/swap.hpp</filename>.</para>
+  <example xml:id="ex.swap_01">
+    <title>Using <function>boost::swap</function></title>
+    <programlisting><xi:include href="../src/swap_01/main.cpp" parse="text"/></programlisting>
+  </example>
+  <para><function>boost::swap</function> does nothing different from <function>std::swap</function>. However, because many Boost libraries offer specializations for swapping data that are defined in the namespace <package>boost</package>, <function>boost::swap</function> can take advantage of them. In <xref linkend="ex.swap_01" xrefstyle="enp"/>, <function>boost::swap</function> accesses <function>std::swap</function> to swap the values of the two <code>char</code> variables and uses the optimized function <function>boost::swap</function> from Boost.Array to swap data in the arrays.</para>
+  <para><xref linkend="ex.swap_01" xrefstyle="enp"/> writes <computeroutput>ba</computeroutput> and <computeroutput>21</computeroutput> to the standard output stream.</para>
+</chapter>

@@ -1,0 +1,2 @@
+exe test : main.cpp ..//boost_headers ..//boost_thread ..//boost_system ..//boost_chrono ;
+stage . : test ;

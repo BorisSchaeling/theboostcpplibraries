@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="5.0" xml:lang="en" xml:id="boost.phoenix">
+  <title>Boost.Phoenix</title><indexterm><primary>Boost.Phoenix</primary></indexterm>
+  <para><link xlink:href="http://www.boost.org/libs/phoenix">Boost.Phoenix</link> is the most important Boost library for functional programming. While libraries like Boost.Bind or Boost.Lambda provide some support for functional programming, Boost.Phoenix includes the features of these libraries and goes beyond them.</para>
+  <para>In functional programming, functions are objects and can be processed like objects. With Boost.Phoenix, it is possible for a function to return another function as a result. It is also possible to pass a function as a parameter to another function. Because functions are objects, it’s possible to distinguish between instantiation and execution. Accessing a function isn’t equal to executing it.</para>
+  <para>Boost.Phoenix supports functional programming with function objects: Functions are objects based on classes which overload the operator <methodname role="operator">operator()</methodname>. That way function objects behave like other objects in C++. For example, they can be copied and stored in a container. However, they also behave like functions because they can be called.</para>
+  <para>Functional programming isn’t new in C++. You can pass a function as a parameter to another function without using Boost.Phoenix.</para>
+  <example xml:id="ex.phoenix_01">
+    <title>Predicates as global function, lambda function, and Phoenix function</title>
+    <programlisting><xi:include href="../src/phoenix_01/main.cpp" parse="text"/></programlisting>
+  </example>
+  <para><xref linkend="ex.phoenix_01" xrefstyle="enp"/> uses the algorithm <function>std::count_if</function> to count odd numbers in vector <varname>v</varname>. <function>std::count_if</function> is called three times, once with a predicate as a free-standing function, once with a lambda function, and once with a Phoenix function.</para>
+  <para>The Phoenix function differs from free-standing and lambda functions because it has no frame. While the other two functions have a function header with a signature, the Phoenix function seems to consist of a function body only.</para>
+  <para>The crucial component of the Phoenix function is <varname>boost::phoenix::placeholders::arg1</varname><indexterm><primary>phoenix::placeholders::arg1</primary></indexterm><indexterm><primary>arg1, phoenix::placeholders</primary></indexterm>. <varname>arg1</varname> is a global instance of a function object. You can use it like <varname>std::cout</varname>: These objects exist once the respective header file is included.</para>
+  <para><varname>arg1</varname> is used to define an unary function. The expression <code>arg1 % 2 == 1</code> creates a new function that expects one parameter. The function isn’t executed immediately but stored in <varname>phoenix</varname>. <varname>phoenix</varname> is passed to <function>std::count_if</function> which calls the predicate for every number in <varname>v</varname>.</para>
+  <para><varname>arg1</varname> is a placeholder for the value passed when the Phoenix function is called. Since only <varname>arg1</varname> is used here, a unary function is created. Boost.Phoenix provides additional placeholders such as <varname>boost::phoenix::placeholders::arg2</varname><indexterm><primary>phoenix::placeholders::arg2</primary></indexterm><indexterm><primary>arg2, phoenix::placeholders</primary></indexterm> and <varname>boost::phoenix::placeholders::arg3</varname><indexterm><primary>phoenix::placeholders::arg3</primary></indexterm><indexterm><primary>arg3, phoenix::placeholders</primary></indexterm>. A Phoenix function always expects as many parameters as the placeholder with the greatest number.</para>
+  <para><xref linkend="ex.phoenix_01" xrefstyle="enp"/> writes <computeroutput>3</computeroutput> three times to standard output.</para>
+  <example xml:id="ex.phoenix_02">
+    <title>Phoenix function versus lambda function</title>
+    <programlisting><xi:include href="../src/phoenix_02/main.cpp" parse="text"/></programlisting>
+  </example>
+  <para><xref linkend="ex.phoenix_02" xrefstyle="enp" /> highlights a crucial difference between Phoenix and lambda functions. In addition to requiring no function header with a parameter list, Phoenix function parameters have no types. The lambda function <varname>lambda</varname> expects a parameter of type <type>int</type>. The Phoenix function <varname>phoenix</varname> will accept any type that the modulo operator can handle.</para>
+  <para>Think of Phoenix functions as function templates. Like function templates, Phoenix functions can accept any type. This makes it possible in <xref linkend="ex.phoenix_02" xrefstyle="enp" /> to use <varname>phoenix</varname> as a predicate for the containers <varname>v</varname> and <varname>v2</varname> even though they store numbers of different types. If you try to use the predicate <varname>lambda</varname> with <varname>v2</varname>, you get a compiler error.</para>
+  <example xml:id="ex.phoenix_03">
+    <title>Phoenix functions as deferred C++ code</title>
+    <programlisting><xi:include href="../src/phoenix_03/main.cpp" parse="text"/></programlisting>
+  </example>
+  <para><xref linkend="ex.phoenix_03" xrefstyle="enp"/> uses a Phoenix function as a predicate with <function>std::count_if</function> to count odd numbers greater than 2. The Phoenix function accesses <varname>arg1</varname> twice: Once to test if the placeholder is greater than 2 and once to test whether it’s an odd number. The conditions are linked with <code>&amp;&amp;</code>.</para>
+  <para>You can think of Phoenix functions as C++ code that isn’t executed immediately. The Phoenix function in <xref linkend="ex.phoenix_03" xrefstyle="enp"/> looks like a condition that uses multiple logical and arithmetic operators. However, the condition isn’t executed immediately. It is only executed when it is accessed from within <function>std::count_if</function>. The access in <function>std::count_if</function> is a normal function call.</para>
+  <para><xref linkend="ex.phoenix_03" xrefstyle="enp"/> writes <computeroutput>2</computeroutput> to standard output.</para>
+  <example xml:id="ex.phoenix_04">
+    <title>Explicit Phoenix types</title>
+    <programlisting><xi:include href="../src/phoenix_04/main.cpp" parse="text"/></programlisting>
+  </example>
+  <para><xref linkend="ex.phoenix_04" xrefstyle="enp"/> uses explicit types for all operands in the Phoenix function. Strictly speaking, you don’t see types, just the helper function <function>boost::phoenix::val</function><indexterm><primary>phoenix::val</primary></indexterm><indexterm><primary>val, phoenix</primary></indexterm>. This function returns a function object initialized with the values passed to <function>boost::phoenix::val</function>. The actual type of the function object doesn’t matter. What is important is that Boost.Phoenix overloads operators like <code>&gt;</code>, <code>&amp;&amp;</code>, <code>%</code> and <code>==</code> for different types. Thus, conditions aren’t checked immediately. Instead, function objects are combined to create more powerful function objects. Depending on the operands they may be automatically used as function objects. Otherwise you can call helper functions like <function>val</function>.</para>
+  <example xml:id="ex.phoenix_05">
+    <title><varname>boost::phoenix::placeholders::arg1</varname> and <function>boost::phoenix::val</function></title>
+    <programlisting><xi:include href="../src/phoenix_05/main.cpp" parse="text"/></programlisting>
+  </example>
+  <para><xref linkend="ex.phoenix_05" xrefstyle="enp"/> illustrates how <varname>arg1</varname> and <function>val</function> work. <varname>arg1</varname> is an instance of a function object. It can be used directly and called like a function. You can pass as many parameters as you like &#x2013; <varname>arg1</varname> returns the first one.</para>
+  <para><function>val</function> is a function to create an instance of a function object. The function object is initialized with the value passed as a parameter. If the instance is accessed like a function, the value is returned.</para>
+  <para><xref linkend="ex.phoenix_05" xrefstyle="enp"/> writes <computeroutput>1</computeroutput> and <computeroutput>2</computeroutput> to standard output.</para>
+  <example xml:id="ex.phoenix_06">
+    <title>Creating your own Phoenix functions</title>
+    <programlisting><xi:include href="../src/phoenix_06/main.cpp" parse="text"/></programlisting>
+  </example>
+  <para><xref linkend="ex.phoenix_06" xrefstyle="enp"/> explains how you can create your own Phoenix function. You pass a function object to the template <classname>boost::phoenix::function</classname><indexterm><primary>phoenix::function</primary></indexterm><indexterm><primary>function, phoenix</primary></indexterm>. The example passes the class <classname>is_odd_impl</classname>. This class overloads the operator <methodname role="operator">operator()</methodname>: when an odd number is passed in, the operator returns <literal>true</literal>. Otherwise, the operator returns <literal>false</literal>.</para>
+  <para>Please note that you must define the type <type>result_type</type>. Boost.Phoenix uses it to detect the type of the return value of the operator <methodname role="operator">operator()</methodname>.</para>
+  <para><function>is_odd</function> is a function you can use like <function>val</function>. Both functions return a function object. When called, parameters are forwarded to the operator <methodname role="operator">operator()</methodname>. For <xref linkend="ex.phoenix_06" xrefstyle="enp"/>, this means that <function>std::count_if</function> still counts odd numbers.</para>
+  <example xml:id="ex.phoenix_07">
+    <title>Transforming free-standing functions into Phoenix functions</title>
+    <programlisting><xi:include href="../src/phoenix_07/main.cpp" parse="text"/></programlisting>
+  </example>
+  <para>If you want to transform a free-standing function into a Phoenix function, you can proceed as in <xref linkend="ex.phoenix_07" xrefstyle="enp"/>. You don’t necessarily have to define a function object as in the previous example.</para>
+  <para>You use the macro <code>BOOST_PHOENIX_ADAPT_FUNCTION</code><indexterm><primary>BOOST_PHOENIX_ADAPT_FUNCTION, Boost.Phoenix</primary></indexterm> to turn a free-standing function into a Phoenix function. Pass the type of the return value, the name of the Phoenix function to define, the name of the free-standing function, and the number of parameters to the macro.</para>
+  <example xml:id="ex.phoenix_08">
+    <title>Phoenix functions with <function>boost::phoenix::bind</function></title>
+    <programlisting><xi:include href="../src/phoenix_08/main.cpp" parse="text"/></programlisting>
+  </example>
+  <para>To use a free-standing function as a Phoenix function, you can also use <function>boost::phoenix::bind</function><indexterm><primary>phoenix::bind</primary></indexterm><indexterm><primary>bind, phoenix</primary></indexterm> as in <xref linkend="ex.phoenix_08" xrefstyle="enp"/>. <function>boost::phoenix::bind</function> works like <function>std::bind</function>. The name of the free-standing function is passed as the first parameter. All further parameters are forwarded to the free-standing function.</para>
+  <tip>
+    <para>Avoid <function>boost::phoenix::bind</function>. Create your own Phoenix functions. This leads to more readable code. Especially with complex expressions it’s not helpful having to deal with the additional details of <function>boost::phoenix::bind</function>.</para>
+  </tip>
+  <example xml:id="ex.phoenix_09">
+    <title>Arbitrarily complex Phoenix functions</title>
+    <programlisting><xi:include href="../src/phoenix_09/main.cpp" parse="text"/></programlisting>
+  </example>
+  <para>Boost.Phoenix provides some function objects that simulate C++ keywords. For example, you can use the function <function>boost::phoenix::if_</function><indexterm><primary>phoenix::if_</primary></indexterm><indexterm><primary>if_, phoenix</primary></indexterm> (see <xref linkend="ex.phoenix_09" xrefstyle="enp"/>) to create a function object that acts like <code>if</code> and tests a condition. If the condition is true, the code passed to the function object with <methodname role="operator">operator[]</methodname> will be executed. Of course, that code also has to be based on function objects. That way, you can create complex Phoenix functions.</para>
+  <para><xref linkend="ex.phoenix_09" xrefstyle="enp"/> increments <varname>count</varname> for every odd number greater than 2. To use the increment operator on <varname>count</varname>, <varname>count</varname> is wrapped in a function object using <function>boost::phoenix::ref</function><indexterm><primary>phoenix::ref</primary></indexterm><indexterm><primary>ref, phoenix</primary></indexterm>. In contrast to <function>boost::phoenix::val</function>, no value is copied into the function object. The function object returned by <function>boost::phoenix::ref</function> stores a reference &#x2013; here a reference to <varname>count</varname>.</para>
+  <tip>
+    <para>Don’t use Boost.Phoenix to create complex functions. It is better to use lambda functions from C++11. While Boost.Phoenix comes close to C++ syntax, using keywords like <code>if_</code> or code blocks between square brackets doesn’t necessarily improve readability.</para>
+  </tip>
+</chapter>

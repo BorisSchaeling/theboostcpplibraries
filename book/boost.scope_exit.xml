@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="5.0" xml:lang="en" xml:id="boost.scopeexit">
+  <title>Boost.ScopeExit</title><indexterm><primary>Boost.ScopeExit</primary></indexterm>
+  <para>The library <link xlink:href="http://www.boost.org/libs/scope_exit">Boost.ScopeExit</link> makes it possible to use <acronym>RAII</acronym><indexterm><primary>RAII, Boost.ScopeExit</primary></indexterm> without resource-specific classes.</para>
+  <example xml:id="ex.scopeexit_01">
+    <title>Using <code>BOOST_SCOPE_EXIT</code></title>
+    <programlisting><xi:include href="../src/scopeexit_01/main.cpp" parse="text"/></programlisting>
+  </example>
+  <para>Boost.ScopeExit provides the macro <code>BOOST_SCOPE_EXIT</code><indexterm><primary>BOOST_SCOPE_EXIT, Boost.ScopeExit</primary></indexterm>, which can be used to define something that looks like a local function but doesn’t have a name. However, it does have a parameter list in parentheses and a block in braces.</para>
+  <para>The header file <filename class="headerfile">boost/scoped_exit.hpp</filename> must be included to use <code>BOOST_SCOPE_EXIT</code>.</para>
+  <para>The parameter list for the macro contains variables from the outer scope which should be accessible in the block. The variables are passed by copy. To pass a variable by reference, it must be prefixed with an ampersand, as in <xref linkend="ex.scopeexit_01" xrefstyle="enp"/>.</para>
+  <para>Code in the block can only access variables from the outer scope if the variables are in the parameter list.</para>
+  <para><code>BOOST_SCOPE_EXIT</code> is used to define a block that will be executed when the scope the block is defined in ends. In <xref linkend="ex.scopeexit_01" xrefstyle="enp"/> the block defined with <code>BOOST_SCOPE_EXIT</code> is executed just before <function>foo</function> returns.</para>
+  <para><code>BOOST_SCOPE_EXIT</code> can be used to benefit from <acronym>RAII</acronym> without having to use resource-specific classes. <function>foo</function> uses <code>new</code> to create an <type>int</type> variable. In order to free the variable, a block that calls <code>delete</code> is defined with <code>BOOST_SCOPE_EXIT</code>. This block is guaranteed to be executed even if, for example, the function returns early because of an exception. In <xref linkend="ex.scopeexit_01" xrefstyle="enp" />, <code>BOOST_SCOPE_EXIT</code> is as good as a smart pointer.</para>
+  <para>Please note that the variable <varname>i</varname> is set to 0 at the end of the block defined by <code>BOOST_SCOPE_EXIT</code>. <varname>i</varname> is then returned by <function>foo</function> and written to the standard output stream in <function>main</function>. However, the example doesn’t display 0. <varname>j</varname> is set to a random value &#x2013; namely the address where the <type>int</type> variable was before the memory was freed. The block behind <code>BOOST_SCOPE_EXIT</code> got a reference to <varname>i</varname> and freed the memory. But since the block is executed at the end of <function>foo</function>, the assignment of 0 to <varname>i</varname> is too late. The return value of <function>foo</function> is a copy of <varname>i</varname> that gets created before <varname>i</varname> is set to 0.</para>
+  <para>You can ignore Boost.ScopeExit if you use a C++11 development environment. In that case, you can use <acronym>RAII</acronym> without resource-specific classes with the help of lambda functions.</para>
+  <example xml:id="ex.scopeexit_02">
+    <title>Boost.ScopeExit with C++11 lambda functions</title>
+    <programlisting><xi:include href="../src/scopeexit_02/main.cpp" parse="text"/></programlisting>
+  </example>
+  <para><xref linkend="ex.scopeexit_02" xrefstyle="enp"/> defines the class <classname>scope_exit</classname> whose constructor accepts a function. This function is called by the destructor. Furthermore, a helper function, <function>make_scope_exit</function>, is defined that makes it possible to instantiate <classname>scope_exit</classname> without having to specify a template parameter.</para>
+  <para>In <function>foo</function> a lambda function is passed to <function>make_scope_exit</function>. The lambda function looks like the block after <code>BOOST_SCOPE_EXIT</code> in <xref linkend="ex.scopeexit_01" xrefstyle="enp"/>: The dynamically allocated <type>int</type> variable whose address is stored in <varname>i</varname> is freed with <code>delete</code>. Then 0 is assigned to <varname>i</varname>.</para>
+  <para>The example does the same thing as the previous one. Not only is the <type>int</type> variable deleted, but <varname>j</varname> is not set to 0 either when it is written to the standard output stream.</para>
+  <example xml:id="ex.scopeexit_03">
+    <title>Peculiarities of <code>BOOST_SCOPE_EXIT</code></title>
+    <programlisting><xi:include href="../src/scopeexit_03/main.cpp" parse="text"/></programlisting>
+  </example>
+  <para><xref linkend="ex.scopeexit_03" xrefstyle="enp"/> introduces some peculiarities of <code>BOOST_SCOPE_EXIT</code>:</para>
+  <itemizedlist>
+    <listitem>
+      <para>When <code>BOOST_SCOPE_EXIT</code> is used to define more than one block in a scope, the blocks are executed in reverse order. <xref linkend="ex.scopeexit_03" xrefstyle="enp"/> displays <computeroutput>first</computeroutput> followed by <computeroutput>last</computeroutput>.</para>
+    </listitem>
+    <listitem>
+      <para>If no variables will be passed to <code>BOOST_SCOPE_EXIT</code>, you need to specify <literal>void</literal>. The parentheses must not be empty.</para>
+    </listitem>
+    <listitem>
+      <para>If you use <code>BOOST_SCOPE_EXIT</code> in a member function and you need to pass a pointer to the current object, you must use <varname>this_</varname><indexterm><primary>this_, Boost.ScopeExit</primary></indexterm>, not <code>this</code>.</para>
+    </listitem>
+  </itemizedlist>
+  <para><xref linkend="ex.scopeexit_03" xrefstyle="enp"/> displays <computeroutput>first</computeroutput>, <computeroutput>last</computeroutput>, and <computeroutput>20</computeroutput> in that order.</para>
+  <simplesect role="exercises" xml:id="boost.scopeexit-exercises">
+    <title>Exercise</title>
+    <para>Replace <classname>std::unique_ptr</classname> and the user-defined deleter with <code>BOOST_SCOPE_EXIT</code>:</para>
+    <informalexample>
+      <programlisting><xi:include href="../exercises/scopeexit_01/main.cpp" parse="text"/></programlisting>
+    </informalexample>
+  </simplesect>
+</chapter>

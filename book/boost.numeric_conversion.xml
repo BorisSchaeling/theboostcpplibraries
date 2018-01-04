@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="5.0" xml:lang="en" xml:id="boost.numeric_conversion">
+  <title>Boost.NumericConversion</title><indexterm><primary>Boost.NumericConversion</primary></indexterm>
+  <para>The library <link xlink:href="http://www.boost.org/libs/numeric/conversion">Boost.NumericConversion</link> can be used to convert numbers of one numeric type to a different numeric type. In C++, such a conversion can also take place implicitly, as shown in <xref linkend="ex.numeric_conversion_01" xrefstyle="enp"/>.</para>
+  <example xml:id="ex.numeric_conversion_01">
+    <title>Implicit conversion from <type>int</type> to <type>short</type></title>
+    <programlisting><xi:include href="../src/numeric_conversion_01/main.cpp" parse="text"/></programlisting>
+  </example>
+  <para><xref linkend="ex.numeric_conversion_01" xrefstyle="enp"/> will compile cleanly because the type conversion from <type>int</type> to <type>short</type> takes place automatically. However, even though the program will run, the result of the conversion depends on the compiler used. The number <literal>0x10000</literal> in the variable <varname>i</varname> is too big to be stored in a variable of type <type>short</type>. According to the standard, the result of this operation is implementation specific. Compiled with Visual C++ 2013, the program displays <computeroutput>0</computeroutput>, which clearly differs from the value in <varname>i</varname>.</para>
+  <para>To avoid these kind of problems, you can use the cast operator <code>boost::numeric_cast</code><indexterm><primary>numeric_cast, Boost.NumericConversion</primary></indexterm> (see <xref linkend="ex.numeric_conversion_02" xrefstyle="enp"/>).</para>
+  <example xml:id="ex.numeric_conversion_02">
+    <title>Overflow detection with <code>boost::numeric_cast</code></title>
+    <programlisting><xi:include href="../src/numeric_conversion_02/main.cpp" parse="text"/></programlisting>
+  </example>
+  <para><code>boost::numeric_cast</code> is used exactly like the existing C++ cast operators. The correct header file must be included; in this case, the header file <filename class="headerfile">boost/numeric/conversion/cast.hpp</filename>.</para>
+  <para><code>boost::numeric_cast</code> does the same conversion as C++, but it verifies whether the conversion can take place without changing the value being converted. In <xref linkend="ex.numeric_conversion_02" xrefstyle="enp"/>, this verification fails, and an exception of type <exceptionname>boost::numeric::bad_numeric_cast</exceptionname><indexterm><primary>numeric::bad_numeric_cast</primary></indexterm><indexterm><primary>bad_numeric_cast, numeric</primary></indexterm> is thrown because <literal>0x10000</literal> is too big to be placed in a variable of type <type>short</type>.</para>
+  <para>Strictly speaking, an exception of type <exceptionname>boost::numeric::positive_overflow</exceptionname><indexterm><primary>numeric::positive_overflow</primary></indexterm><indexterm><primary>positive_overflow, numeric</primary></indexterm> will be thrown. This type specifies an overflow &#x2013; in this case for positive numbers. There is also <exceptionname>boost::numeric::negative_overflow</exceptionname><indexterm><primary>numeric::negative_overflow</primary></indexterm><indexterm><primary>negative_overflow, numeric</primary></indexterm>, which specifies an overflow for negative numbers (see <xref linkend="ex.numeric_conversion_03" xrefstyle="enp"/>).</para>
+  <example xml:id="ex.numeric_conversion_03">
+    <title>Overflow detection for negative numbers</title>
+    <programlisting><xi:include href="../src/numeric_conversion_03/main.cpp" parse="text"/></programlisting>
+  </example>
+  <para>Boost.NumericConversion defines additional exception types, all derived from <exceptionname>boost::numeric::bad_numeric_cast</exceptionname>. Because <exceptionname>boost::numeric::bad_numeric_cast</exceptionname> is derived from <exceptionname>std::bad_cast</exceptionname>, a <code>catch</code> handler can also catch exceptions of this type.</para>
+</chapter>

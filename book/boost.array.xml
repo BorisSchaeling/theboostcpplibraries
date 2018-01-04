@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="5.0" xml:lang="en" xml:id="boost.array">
+  <title>Boost.Array</title><indexterm><primary>Boost.Array</primary></indexterm>
+  <para>The library <link xlink:href="http://www.boost.org/libs/array/">Boost.Array</link> defines the class template <classname>boost::array</classname><indexterm><primary>array, Boost.Array</primary></indexterm> in <filename class="headerfile">boost/array.hpp</filename>. <classname>boost::array</classname> is similar to <classname>std::array</classname>, which was added to the standard library with C++11. You can ignore <classname>boost::array</classname> if you work with a C++11 development environment.</para>
+  <para>With <classname>boost::array</classname>, an array can be created that exhibits the same properties as a C array. In addition, <classname>boost::array</classname> conforms to the requirements of C++ containers, which makes handling such an array as easy as handling any other container. In principle, one can think of <classname>boost::array</classname> as the container <classname>std::vector</classname>, except the number of elements in <classname>boost::array</classname> is constant.</para>
+  <example xml:id="ex.array_01">
+    <title>Various member functions of <classname>boost::array</classname></title>
+    <programlisting><xi:include href="../src/array_01/main.cpp" parse="text"/></programlisting>
+  </example>
+  <para>As seen in <xref linkend="ex.array_01" xrefstyle="enp"/>, using <classname>boost::array</classname> is fairly simple and needs no additional explanation since the member functions called have the same meaning as their counterparts from <classname>std::vector</classname>.</para>
+</chapter>
