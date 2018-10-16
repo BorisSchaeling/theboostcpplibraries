@@ -1,9 +1,9 @@
-#include <boost/coroutine/all.hpp>
+#include <boost/coroutine2/all.hpp>
 #include <tuple>
 #include <string>
 #include <iostream>
 
-using boost::coroutines::coroutine;
+using boost::coroutines2::coroutine;
 
 void cooperative(coroutine<std::tuple<int, std::string>>::pull_type &source)
 {

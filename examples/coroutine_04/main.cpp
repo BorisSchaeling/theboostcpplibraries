@@ -1,8 +1,8 @@
-#include <boost/coroutine/all.hpp>
+#include <boost/coroutine2/all.hpp>
 #include <stdexcept>
 #include <iostream>
 
-using boost::coroutines::coroutine;
+using boost::coroutines2::coroutine;
 
 void cooperative(coroutine<void>::push_type &sink)
 {

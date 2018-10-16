@@ -1,7 +1,7 @@
-#include <boost/coroutine/all.hpp>
+#include <boost/coroutine2/all.hpp>
 #include <iostream>
 
-using namespace boost::coroutines;
+using namespace boost::coroutines2;
 
 void cooperative(coroutine<void>::push_type &sink)
 {
