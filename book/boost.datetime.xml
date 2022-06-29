@@ -69,7 +69,7 @@
       <title>Exercises</title>
       <orderedlist>
         <listitem><para>Create a program that outputs the weekdays for next December 24 and the following two public holidays.</para></listitem>
-        <listitem><para>Calculate your age in days. Your programm should automatically use today’s date.</para></listitem>
+        <listitem><para>Calculate your age in days. Your program should automatically use today’s date.</para></listitem>
       </orderedlist>
     </simplesect>
   </sect1>
