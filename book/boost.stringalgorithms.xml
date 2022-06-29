@@ -80,6 +80,6 @@
   <para><xref linkend="ex.stringalgorithms_12" xrefstyle="enp"/> writes <computeroutput>C++</computeroutput> to standard output.</para>
   <simplesect role="exercises" xml:id="boost.stringalgorithms-exercises">
     <title>Exercise</title>
-    <para>Create a program which asks the user to enter his full name. The program should greet the user with <quote>Hello</quote> followed by the user's name followed by an exclamation mark. The user's first- and lastname should start with a capital letter followed by lowercase letters. Furthermore, the user's first- und lastname should be separated with exactly one space. There should be no space before the exclamation mark.</para>
+    <para>Create a program which asks the user to enter his full name. The program should greet the user with <quote>Hello</quote> followed by the user's name followed by an exclamation mark. The user's first- and lastname should start with a capital letter followed by lowercase letters. Furthermore, the user's first- and lastname should be separated with exactly one space. There should be no space before the exclamation mark.</para>
   </simplesect>
 </chapter>
